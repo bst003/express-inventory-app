@@ -3,13 +3,16 @@ var express = require("express");
 var path = require("path");
 var cookieParser = require("cookie-parser");
 var logger = require("morgan");
+const mongoDBConfig = require("./mongodb.config");
 
 var indexRouter = require("./routes/index");
 var usersRouter = require("./routes/users");
 
+console.log(mongoDBConfig.password);
+
 /*
 const mongoose = require('mongoose');
-const uri = "mongodb+srv://bstanner33:<password>@cluster0.xpetqvd.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
+const uri = `mongodb+srv://${mongoDBConfig.username}:${mongoDBConfig.password}@cluster0.xpetqvd.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`;
 const clientOptions = { serverApi: { version: '1', strict: true, deprecationErrors: true } };
 async function run() {
   try {
