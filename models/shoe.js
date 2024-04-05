@@ -6,8 +6,8 @@ const shoeSchema = new Schema({
   name: { type: String, required: true, maxlength: 150 },
   description: { type: String, maxlength: 300 },
   price: { type: Number, required: true },
-  brand: { type: Schema.Types.ObjectId, ref: Brand, required: true },
-  style: { type: Schema.Types.ObjectId, ref: Style },
+  brand: { type: Schema.Types.ObjectId, ref: "Brand", required: true },
+  style: { type: Schema.Types.ObjectId, ref: "Style" },
 });
 
 shoeSchema.virtual("url").get(function () {
