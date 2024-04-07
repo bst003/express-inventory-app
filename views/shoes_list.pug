@@ -1,0 +1,13 @@
+extends layout
+
+block content
+	h1= title
+	h2= length
+	if shoes
+		p Check out our wide array of running shoes 
+		ul 
+			each shoe in shoes
+				li 
+					a(href=shoe.url) #{shoe.name} - $#{shoe.price}
+	else 
+		p There are no shoes in our inventory

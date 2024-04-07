@@ -1,35 +1,27 @@
-var createError = require("http-errors");
-var express = require("express");
-var path = require("path");
-var cookieParser = require("cookie-parser");
-var logger = require("morgan");
+const mongoose = require("mongoose");
 const mongoDBConfig = require("./mongodb.config");
 
-var indexRouter = require("./routes/index");
-var usersRouter = require("./routes/users");
-var shoesRouter = require("./routes/shoes");
+mongoose.set("strictQuery", false);
 
-const mongoose = require("mongoose");
-const uri = `mongodb+srv://${mongoDBConfig.username}:${mongoDBConfig.password}@cluster0.xpetqvd.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`;
-const clientOptions = {
-  serverApi: { version: "1", strict: true, deprecationErrors: true },
-};
-async function run() {
-  try {
-    // Create a Mongoose client with a MongoClientOptions object to set the Stable API version
-    await mongoose.connect(uri, clientOptions);
-    await mongoose.connection.db.admin().command({ ping: 1 });
-    console.log(
-      "Pinged your deployment. You successfully connected to MongoDB!"
-    );
-  } finally {
-    // Ensures that the client will close when you finish/error
-    await mongoose.disconnect();
-  }
+const uri = `mongodb+srv://${mongoDBConfig.username}:${mongoDBConfig.password}@cluster0.xpetqvd.mongodb.net/inventory_app?retryWrites=true&w=majority&appName=Cluster0`;
+
+mongoConnect().catch(console.dir);
+async function mongoConnect() {
+  // Create a Mongoose client with a MongoClientOptions object to set the Stable API version
+  await mongoose.connect(uri);
+  console.log("Pinged your deployment. You successfully connected to MongoDB!");
 }
-run().catch(console.dir);
 
-var app = express();
+const createError = require("http-errors");
+const express = require("express");
+const path = require("path");
+const cookieParser = require("cookie-parser");
+const logger = require("morgan");
+
+const indexRouter = require("./routes/index");
+const shoesRouter = require("./routes/shoes");
+
+const app = express();
 
 // view engine setup
 app.set("views", path.join(__dirname, "views"));

@@ -1,11 +1,20 @@
 const async_handler = require("express-async-handler");
 
-const shoe = require("../models/shoe");
+const Shoe = require("../models/shoe");
 
 const shoeController = {};
 
 shoeController.shoes_list = async_handler(async (req, res, next) => {
-  res.send("NOT YET IMPLEMENTED, SHOES LIST");
+  const shoes = await Shoe.find().exec();
+
+  console.log(shoes);
+
+  res.render("shoes_list", {
+    title: "All Shoes",
+    length: shoes.length,
+
+    shoes: shoes,
+  });
 });
 
 shoeController.shoes_detail = async_handler(async (req, res, next) => {
