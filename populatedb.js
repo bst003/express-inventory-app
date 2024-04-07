@@ -1,11 +1,13 @@
 #! /usr/bin/env node
 
 console.log(
-  'This script populates some test brands, styles and shows to your database. Specified database as argument - e.g.: node populatedb "mongodb+srv://${mongoDBConfig.username}:${mongoDBConfig.password}@cluster0.xpetqvd.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"'
+  'This script populates some test brands, styles and shows to your database. Specified database as argument - e.g.: node populatedb "node populatedb mongodb+srv://<username>:<password>@cluster0.xpetqvd.mongodb.net/inventory_app?retryWrites=true&w=majority&appName=Cluster0"'
 );
 
 // Get arguments passed on command line
 const userArgs = process.argv.slice(2);
+
+console.log(userArgs);
 
 const Brand = require("./models/brand");
 const Style = require("./models/style");
@@ -19,7 +21,7 @@ const mongoose = require("mongoose");
 mongoose.set("strictQuery", false);
 
 console.log("test");
-console.log(userArgs);
+console.log(process.argv);
 
 const mongoDB = userArgs[0];
 

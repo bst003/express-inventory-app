@@ -7,8 +7,7 @@ const mongoDBConfig = require("./mongodb.config");
 
 var indexRouter = require("./routes/index");
 var usersRouter = require("./routes/users");
-
-console.log(mongoDBConfig.password);
+var shoesRouter = require("./routes/shoes");
 
 const mongoose = require("mongoose");
 const uri = `mongodb+srv://${mongoDBConfig.username}:${mongoDBConfig.password}@cluster0.xpetqvd.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`;
@@ -43,7 +42,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 
 app.use("/", indexRouter);
-app.use("/users", usersRouter);
+app.use("/shoes", shoesRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
