@@ -8,7 +8,7 @@ const brandSchema = new Schema({
 
 // Create a virtual property `domain` that's computed from `email`.
 brandSchema.virtual("url").get(function () {
-  return `/brand/${this._id}`;
+  return `/brands/${this._id}`;
 });
 
 const Brand = mongoose.model("Brand", brandSchema);

@@ -7,7 +7,7 @@ const styleSchema = new Schema({
 });
 
 styleSchema.virtual("url").get(function () {
-  return `/style/${this._id}`;
+  return `/styles/${this._id}`;
 });
 
 const Style = mongoose.model("Style", styleSchema);
