@@ -1,0 +1,12 @@
+extends layout
+
+block content
+	h1= title
+	if brands
+		p Check out our wide array of running shoe brands 
+		ul 
+			each brand in brands
+				li 
+					a(href=brand.url) #{brand.name}
+	else 
+		p There are no brands in our inventory
