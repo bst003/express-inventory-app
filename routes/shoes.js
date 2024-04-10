@@ -8,14 +8,14 @@ const shoeController = require("../controllers/shoeController");
 /* GET Shoes index page. */
 router.get("/", shoeController.shoes_list);
 
-/* GET Single Shoe page */
-router.get("/:id", shoeController.shoes_detail);
-
 /* GET Create Shoe page */
 router.get("/create", shoeController.shoes_create_get);
 
 /* POST Create Shoe page */
 router.post("/create", shoeController.shoes_create_post);
+
+/* GET Single Shoe page */
+router.get("/:id", shoeController.shoes_detail);
 
 /* GET Delete Single Shoe page */
 router.get("/:id/delete", shoeController.shoes_delete_get);

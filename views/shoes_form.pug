@@ -1,0 +1,25 @@
+extends layout
+
+block content
+    h1 #{title} 
+    form(action=postUrl method="post")
+        div(class="input-contain")
+            label(for="name") Name 
+            input(id="name" name="name" type="text")
+        div(class="input-contain")
+            label(for="description") Description 
+            textarea(id="description" name="description")
+        div(class="input-contain")
+            label(for="price") Price 
+            input(id="price" name="price" type="number")
+        div(class="input-contain")
+            label(for="brand") Brand 
+            select(id="brand" name="brand")
+                each brand in brands 
+                    option(value=brand._id) #{brand.name}
+        div(class="input-contain")
+            label(for="style") Style 
+            select(id="style" name="style")
+                each style in styles 
+                    option(value=style._id) #{style.name}
+        input(type="Submit" value="Submit")  

@@ -6,7 +6,7 @@ const Shoe = require("../models/shoe");
 const styleController = {};
 
 styleController.styles_list = async_handler(async (req, res, next) => {
-  const styles = await Style.find().exec();
+  const styles = await Style.find().sort({ name: "asc" }).exec();
 
   console.log(styles);
 

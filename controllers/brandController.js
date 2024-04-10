@@ -6,7 +6,7 @@ const Shoe = require("../models/shoe");
 const brandController = {};
 
 brandController.brands_list = async_handler(async (req, res, next) => {
-  const brands = await Brand.find().exec();
+  const brands = await Brand.find().sort({ name: "asc" }).exec();
 
   console.log(brands);
 

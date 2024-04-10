@@ -1,11 +1,13 @@
 const async_handler = require("express-async-handler");
 
 const Shoe = require("../models/shoe");
+const Style = require("../models/style");
+const Brand = require("../models/brand");
 
 const shoeController = {};
 
 shoeController.shoes_list = async_handler(async (req, res, next) => {
-  const shoes = await Shoe.find().exec();
+  const shoes = await Shoe.find().sort({ name: "asc" }).exec();
 
   console.log(shoes);
 
@@ -29,7 +31,19 @@ shoeController.shoes_detail = async_handler(async (req, res, next) => {
 });
 
 shoeController.shoes_create_get = async_handler(async (req, res, next) => {
-  res.send("NOT YET IMPLEMENTED, SHOES CREATE GET");
+  const [styles, brands] = await Promise.all([
+    Style.find().sort({ name: "asc" }).exec(),
+    Brand.find().sort({ name: "asc" }).exec(),
+  ]);
+
+  const postUrl = req.originalUrl;
+
+  res.render("shoes_form", {
+    title: "Create Shoe",
+    postUrl,
+    styles,
+    brands,
+  });
 });
 
 shoeController.shoes_create_post = async_handler(async (req, res, next) => {
