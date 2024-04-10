@@ -1,0 +1,11 @@
+extends layout
+
+block content
+    h1 #{title} #{shoe.name}
+    p $#{shoe.price}
+    p #{shoe.description}
+    hr
+    p Brand:
+        a(href=shoe.brand.url)  #{shoe.brand.name}
+    p Style: 
+        a(href=shoe.style.url)  #{shoe.style.name}

@@ -11,14 +11,21 @@ shoeController.shoes_list = async_handler(async (req, res, next) => {
 
   res.render("shoes_list", {
     title: "All Shoes",
-    length: shoes.length,
-
     shoes: shoes,
   });
 });
 
 shoeController.shoes_detail = async_handler(async (req, res, next) => {
-  res.send("NOT YET IMPLEMENTED, SHOES DETAIL");
+  const shoe = await Shoe.findById(req.params.id)
+    .populate("brand style")
+    .exec();
+
+  console.log(shoe);
+
+  res.render("shoes_detail", {
+    title: "Shoe: ",
+    shoe: shoe,
+  });
 });
 
 shoeController.shoes_create_get = async_handler(async (req, res, next) => {
