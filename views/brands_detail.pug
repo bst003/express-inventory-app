@@ -1,0 +1,12 @@
+extends layout
+
+block content
+    h1 #{title} #{brand.name}
+    if shoesInBrand.length
+        p check out our selection of shoes for #{brand.name}
+        ul 
+            each shoe in shoesInBrand
+                li 
+                    a(href=shoe.url) #{shoe.name} - $#{shoe.price}
+    else 
+        p There are no shoes in this brand.

@@ -1,6 +1,7 @@
 const async_handler = require("express-async-handler");
 
 const Brand = require("../models/brand");
+const Shoe = require("../models/shoe");
 
 const brandController = {};
 
@@ -16,7 +17,18 @@ brandController.brands_list = async_handler(async (req, res, next) => {
 });
 
 brandController.brands_detail = async_handler(async (req, res, next) => {
-  res.send("NOT YET IMPLEMENTED, BRANDS DETAIL");
+  const [brand, shoesInBrand] = await Promise.all([
+    Brand.findById(req.params.id).exec(),
+    Shoe.find({ brand: req.params.id }).exec(),
+  ]);
+
+  console.log(brand);
+
+  res.render("brands_detail", {
+    title: "Brand: ",
+    brand,
+    shoesInBrand,
+  });
 });
 
 brandController.brands_create_get = async_handler(async (req, res, next) => {
