@@ -1,0 +1,12 @@
+extends layout
+
+block content
+	h1= title
+	if styles
+		p Check out our wide array of running shoe styles 
+		ul 
+			each style in styles
+				li 
+					a(href=style.url) #{style.name}
+	else 
+		p There are no styles in our inventory
