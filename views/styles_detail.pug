@@ -1,0 +1,12 @@
+extends layout
+
+block content
+    h1 #{title} #{style.name}
+    if shoesInStyle.length
+        p check out our selection of #{style.name} shoes
+        ul 
+            each shoe in shoesInStyle
+                li 
+                    a(href=shoe.url) #{shoe.name} - $#{shoe.price}
+    else 
+        p There are no shoes of this style.
