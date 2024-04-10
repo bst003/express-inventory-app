@@ -1,4 +1,5 @@
 const async_handler = require("express-async-handler");
+const { query, validationResult, body } = require("express-validator");
 
 const Shoe = require("../models/shoe");
 const Style = require("../models/style");
@@ -46,9 +47,27 @@ shoeController.shoes_create_get = async_handler(async (req, res, next) => {
   });
 });
 
-shoeController.shoes_create_post = async_handler(async (req, res, next) => {
-  res.send("NOT YET IMPLEMENTED, SHOES CREATE POST");
-});
+shoeController.shoes_create_post = [
+  body("name").notEmpty().trim(),
+  body("description").notEmpty().trim(),
+  body("price").notEmpty().trim(),
+  body("brand").notEmpty().trim(),
+  body("style").notEmpty().trim(),
+  async_handler(async (req, res, next) => {
+    const result = validationResult(req);
+    if (result.isEmpty()) {
+      res.send("NOT YET IMPLEMENTED, SHOES CREATE POST");
+    }
+
+    res.send("some error here");
+  }),
+];
+
+// shoeController.shoes_create_post = async_handler(async (req, res, next) => {
+//   body("name").notEmpty().trim();
+
+//   res.send("NOT YET IMPLEMENTED, SHOES CREATE POST");
+// });
 
 shoeController.shoes_delete_get = async_handler(async (req, res, next) => {
   res.send("NOT YET IMPLEMENTED, SHOES DELETE GET");

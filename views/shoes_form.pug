@@ -5,13 +5,13 @@ block content
     form(action=postUrl method="post")
         div(class="input-contain")
             label(for="name") Name 
-            input(id="name" name="name" type="text")
+            input(id="name" name="name" type="text" required)
         div(class="input-contain")
             label(for="description") Description 
-            textarea(id="description" name="description")
+            textarea(id="description" name="description" required)
         div(class="input-contain")
             label(for="price") Price 
-            input(id="price" name="price" type="number")
+            input(id="price" name="price" type="number" required)
         div(class="input-contain")
             label(for="brand") Brand 
             select(id="brand" name="brand")
