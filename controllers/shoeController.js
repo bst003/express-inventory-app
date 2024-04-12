@@ -76,9 +76,10 @@ shoeController.shoes_create_post = [
     .withMessage("Style must not be empty"),
   async_handler(async (req, res, next) => {
     const result = validationResult(req);
+
+    // if errors return shoes_form and list errors
     if (!result.isEmpty()) {
       console.log(result);
-      // res.send("some error");
 
       const [styles, brands] = await Promise.all([
         Style.find().sort({ name: "asc" }).exec(),
