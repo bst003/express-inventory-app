@@ -48,18 +48,55 @@ shoeController.shoes_create_get = async_handler(async (req, res, next) => {
 });
 
 shoeController.shoes_create_post = [
-  body("name").notEmpty().trim(),
-  body("description").notEmpty().trim(),
-  body("price").notEmpty().trim(),
-  body("brand").notEmpty().trim(),
-  body("style").notEmpty().trim(),
+  body("name")
+    .isLength({ min: 3, max: 150 })
+    .trim()
+    .escape()
+    .withMessage("Name must be between 3 and 150 characters"),
+  body("description")
+    .optional({ checkFalsy: true })
+    .isLength({ max: 300 })
+    .notEmpty()
+    .trim()
+    .escape()
+    .withMessage("Descriptions must not be over 300 characters"),
+  body("price")
+    .isInt({ min: 1 })
+    .trim()
+    .withMessage("Price needs to be at least 1"),
+  body("brand")
+    .notEmpty()
+    .trim()
+    .escape()
+    .withMessage("Brand must not be empty"),
+  body("style")
+    .notEmpty()
+    .trim()
+    .escape()
+    .withMessage("Style must not be empty"),
   async_handler(async (req, res, next) => {
     const result = validationResult(req);
-    if (result.isEmpty()) {
-      res.send("NOT YET IMPLEMENTED, SHOES CREATE POST");
+    if (!result.isEmpty()) {
+      console.log(result);
+      // res.send("some error");
+
+      const [styles, brands] = await Promise.all([
+        Style.find().sort({ name: "asc" }).exec(),
+        Brand.find().sort({ name: "asc" }).exec(),
+      ]);
+
+      const postUrl = req.originalUrl;
+
+      res.render("shoes_form", {
+        title: "Create Shoe",
+        postUrl,
+        styles,
+        errors: result.errors,
+        brands,
+      });
     }
 
-    res.send("some error here");
+    res.send("NOT YET IMPLEMENTED, SHOES CREATE POST");
   }),
 ];
 
