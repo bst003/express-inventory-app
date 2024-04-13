@@ -1,4 +1,5 @@
 const async_handler = require("express-async-handler");
+const { query, validationResult, body } = require("express-validator");
 
 const Brand = require("../models/brand");
 const Shoe = require("../models/shoe");
@@ -32,12 +33,53 @@ brandController.brands_detail = async_handler(async (req, res, next) => {
 });
 
 brandController.brands_create_get = async_handler(async (req, res, next) => {
-  res.send("NOT YET IMPLEMENTED, BRANDS CREATE GET");
+  const postUrl = req.originalUrl;
+
+  res.render("brands_form", {
+    title: "Create Brand",
+    postUrl,
+  });
 });
 
-brandController.brands_create_post = async_handler(async (req, res, next) => {
-  res.send("NOT YET IMPLEMENTED, BRANDS CREATE POST");
-});
+brandController.brands_create_post = [
+  body("name")
+    .isLength({ min: 3, max: 150 })
+    .trim()
+    .escape()
+    .withMessage("Name must be between 3 and 150 characters"),
+  async_handler(async (req, res, next) => {
+    const result = validationResult(req);
+
+    console.log(req);
+
+    // if errors return shoes_form and list errors
+    if (!result.isEmpty()) {
+      console.log(result);
+
+      const postUrl = req.originalUrl;
+
+      res.render("shoes_form", {
+        title: "Create Shoe",
+        postUrl,
+        errors: result.errors,
+      });
+    }
+
+    // If no errors then create shoe and redirect to shoe detail page
+    const brandDetails = {
+      name: req.body.name,
+    };
+
+    const newBrand = new Brand(brandDetails);
+    await newBrand.save();
+
+    res.render("brands_detail", {
+      title: "Brand: ",
+      shoesInBrand: [],
+      brand: brandDetails,
+    });
+  }),
+];
 
 brandController.brands_delete_get = async_handler(async (req, res, next) => {
   res.send("NOT YET IMPLEMENTED, BRANDS DELETE GET");

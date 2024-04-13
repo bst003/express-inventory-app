@@ -8,14 +8,14 @@ const styleController = require("../controllers/styleController");
 /* GET styles index page. */
 router.get("/", styleController.styles_list);
 
-/* GET Single Style page */
-router.get("/:id", styleController.styles_detail);
-
 /* GET Create Style page */
 router.get("/create", styleController.styles_create_get);
 
 /* POST Create Style page */
 router.post("/create", styleController.styles_create_post);
+
+/* GET Single Style page */
+router.get("/:id", styleController.styles_detail);
 
 /* GET Delete Single Style page */
 router.get("/:id/delete", styleController.styles_delete_get);

@@ -99,6 +99,7 @@ shoeController.shoes_create_post = [
       });
     }
 
+    // If no errors then create shoe and redirect to shoe detail page
     const shoeDetails = {
       name: req.body.name,
       description: req.body.description,
@@ -116,12 +117,6 @@ shoeController.shoes_create_post = [
     });
   }),
 ];
-
-// shoeController.shoes_create_post = async_handler(async (req, res, next) => {
-//   body("name").notEmpty().trim();
-
-//   res.send("NOT YET IMPLEMENTED, SHOES CREATE POST");
-// });
 
 shoeController.shoes_delete_get = async_handler(async (req, res, next) => {
   res.send("NOT YET IMPLEMENTED, SHOES DELETE GET");

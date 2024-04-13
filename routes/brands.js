@@ -8,14 +8,14 @@ const brandController = require("../controllers/brandController");
 /* GET brands index page. */
 router.get("/", brandController.brands_list);
 
-/* GET Single  Brand page */
-router.get("/:id", brandController.brands_detail);
-
 /* GET Create Brand page */
 router.get("/create", brandController.brands_create_get);
 
 /* POST Create Brand page */
 router.post("/create", brandController.brands_create_post);
+
+/* GET Single  Brand page */
+router.get("/:id", brandController.brands_detail);
 
 /* GET Delete Single Brand page */
 router.get("/:id/delete", brandController.brands_delete_get);
