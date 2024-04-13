@@ -77,6 +77,8 @@ shoeController.shoes_create_post = [
   async_handler(async (req, res, next) => {
     const result = validationResult(req);
 
+    console.log(req);
+
     // if errors return shoes_form and list errors
     if (!result.isEmpty()) {
       console.log(result);
@@ -97,7 +99,21 @@ shoeController.shoes_create_post = [
       });
     }
 
-    res.send("NOT YET IMPLEMENTED, SHOES CREATE POST");
+    const shoeDetails = {
+      name: req.body.name,
+      description: req.body.description,
+      price: req.body.price,
+      brand: req.body.brand,
+      style: req.body.style,
+    };
+
+    const newShoe = new Shoe(shoeDetails);
+    await newShoe.save();
+
+    res.render("shoes_detail", {
+      title: "Shoe: ",
+      shoe: shoeDetails,
+    });
   }),
 ];
 
