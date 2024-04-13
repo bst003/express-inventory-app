@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 const brandSchema = new Schema({
-  name: { type: String, required: true, maxLength: 150 },
+  name: { type: String, required: true, minLength: 3, maxLength: 150 },
 });
 
 // Create a virtual property `domain` that's computed from `email`.
