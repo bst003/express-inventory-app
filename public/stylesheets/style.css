@@ -1,8 +1,110 @@
+:root{
+  --siteContentPaddingX: 20px;
+  --siteContentWidth: 1260px;
+}
+
 body {
-  padding: 50px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  /* padding: 50px; */
+  margin: 0px;
+  font-size: 18px;
+  font-family: "Lucida Grande", Helvetica, Arial, sans-serif;
+}
+
+/* Header */ 
+
+.site-header{
+  padding: 0px var(--siteContentPaddingX);
+  background-color: #18223a;
+}
+
+.site-header__inner{
+  margin: 0 auto;
+  max-width: var(--siteContentWidth);
+  display: flex;
+  gap: 20px;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.site-header__inner > *{
+  margin: 0px;
+}
+
+.site-logo{
+  color: #fff;
+  font-size: 24px;
+  font-weight: 700;
+}
+
+.site-nav > ul{
+  display: flex;
+  gap: 20px;
+}
+
+.site-nav ul{
+  margin: 0px;
+  padding: 0px;
+  list-style-type: none;
+}
+
+.site-nav ul.sub-menu{
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 200px;
+  background-color: #18223a;
+}
+  .site-nav ul.sub-menu li a{
+    display: block;
+    padding: 10px;
+  }
+
+.site-nav > ul > li > a,
+.site-nav > ul > li > span{
+  display: block;
+  padding: 28px 10px;
+}
+
+.site-nav li.has-sub-menu{
+  position: relative;
+}
+  .site-nav li.has-sub-menu > span{
+    position: relative;
+  }
+  .site-nav li.has-sub-menu > span::after{
+    content: "\f078";
+    font-family: "Font Awesome 6 Free";
+    font-weight: 900;
+  }
+  .site-nav li.has-sub-menu:hover .sub-menu{
+    display: block;
+  }
+
+.site-nav li:hover > a,
+.site-nav li:hover > span {
+  background-color: #020408;
+}
+
+.site-nav li,
+.site-nav a {
+  color: #fff;
+  font-weight: 600;
+  text-decoration: none;
 }
 
 a {
   color: #00B7FF;
+}
+
+/* Main */ 
+
+.site-content{
+  padding: 0px var(--siteContentPaddingX);
+}
+
+.site-content__inner{
+  margin: 0 auto;
+  max-width: var(--siteContentWidth);
 }
