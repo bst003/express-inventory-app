@@ -6,7 +6,7 @@ block content
         div(class="input-contain")
             label(for="name") Name 
                 span(class="required") *
-            input(id="name" name="name" type="text" minlength="3" maxlength="150" required)
+            input(id="name" name="name" type="text" value=(shoe && shoe.name ? shoe.name : "") minlength="3" maxlength="150" required)
         div(class="input-contain")
             label(for="description") Description 
             textarea(id="description" name="description" maxlength="300")

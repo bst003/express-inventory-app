@@ -131,7 +131,8 @@ shoeController.shoes_update_get = async_handler(async (req, res, next) => {
 
   const currentShoeId = parsedUrlPath.split("/")[1];
 
-  const [styles, brands] = await Promise.all([
+  const [currentShoe, styles, brands] = await Promise.all([
+    Shoe.findById(currentShoeId).exec(),
     Style.find().sort({ name: "asc" }).exec(),
     Brand.find().sort({ name: "asc" }).exec(),
   ]);
@@ -139,8 +140,9 @@ shoeController.shoes_update_get = async_handler(async (req, res, next) => {
   const postUrl = req.originalUrl;
 
   res.render("shoes_form", {
-    title: "Update Shoe",
+    title: "Update Shoe: " + currentShoe.name,
     postUrl,
+    shoe: currentShoe,
     styles,
     brands,
   });
