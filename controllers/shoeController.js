@@ -127,7 +127,23 @@ shoeController.shoes_delete_post = async_handler(async (req, res, next) => {
 });
 
 shoeController.shoes_update_get = async_handler(async (req, res, next) => {
-  res.send("NOT YET IMPLEMENTED, SHOES UPDATE GET");
+  const parsedUrlPath = req._parsedUrl.path;
+
+  const currentShoeId = parsedUrlPath.split("/")[1];
+
+  const [styles, brands] = await Promise.all([
+    Style.find().sort({ name: "asc" }).exec(),
+    Brand.find().sort({ name: "asc" }).exec(),
+  ]);
+
+  const postUrl = req.originalUrl;
+
+  res.render("shoes_form", {
+    title: "Update Shoe",
+    postUrl,
+    styles,
+    brands,
+  });
 });
 
 shoeController.shoes_update_post = async_handler(async (req, res, next) => {
