@@ -10,6 +10,10 @@ body {
   font-family: "Lucida Grande", Helvetica, Arial, sans-serif;
 }
 
+body *{
+  box-sizing: border-box;
+}
+
 /* Header */ 
 
 .site-header{
@@ -108,3 +112,50 @@ a {
   margin: 0 auto;
   max-width: var(--siteContentWidth);
 }
+
+/* Forms */ 
+
+form label{
+  display: block;
+  margin: 0px 0px 5px;
+}
+
+form .input-contain{
+  margin: 0pc 0pc 12px;
+}
+
+form input[type="text"],
+form input[type="number"],
+form select{
+  height: 38px;
+}
+
+form textarea{
+  height: 100px;
+}
+
+form input[type="text"],
+form input[type="number"],
+form select,
+form textarea {
+  border-radius: 6px;
+  border: 2px solid #2d3850;
+  background-color: #fff;
+  font-size: 18px;
+  max-width: 500px;
+  width: 100%;
+}
+
+form input[type="submit"]{
+  margin: 12px 0px 0px;
+  padding: 8px 12px;
+  border: initial;
+  border-radius: 6px;
+  background-color: #18223a;
+  color: #fff;
+  font-size: 18px;
+  font-weight: 600;
+  cursor: pointer;}
+  form input[type="submit"]:hover{
+    background-color: #020408;
+  }
