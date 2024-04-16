@@ -9,23 +9,23 @@ block content
             input(id="name" name="name" type="text" value=(shoe && shoe.name ? shoe.name : "") minlength="3" maxlength="150" required)
         div(class="input-contain")
             label(for="description") Description 
-            textarea(id="description" name="description" maxlength="300")
+            textarea(id="description" name="description" maxlength="300")= shoe && shoe.description ? shoe.description : "" 
         div(class="input-contain")
             label(for="price") Price 
                 span(class="required") *
-            input(id="price" name="price" type="number" min="1" required)
+            input(id="price" name="price" type="number" value=(shoe && shoe.price ? shoe.price : "") min="1" required)
         div(class="input-contain")
             label(for="brand") Brand 
                 span(class="required") *
             select(id="brand" name="brand")
                 each brand in brands 
-                    option(value=brand._id) #{brand.name}
+                    option(value=(brand._id) selected=(shoe && shoe.brand.toString() == brand._id.toString() ? true : false)) #{brand.name}
         div(class="input-contain")
             label(for="style") Style 
                 span(class="required") *
             select(id="style" name="style")
                 each style in styles 
-                    option(value=style._id) #{style.name}
+                    option(value=style._id selected=(shoe && shoe.style.toString() == style._id.toString() ? true : false)) #{style.name}
         input(type="Submit" value="Submit")  
     if errors 
         each error in errors 
