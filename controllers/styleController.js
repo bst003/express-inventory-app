@@ -90,7 +90,19 @@ styleController.styles_delete_post = async_handler(async (req, res, next) => {
 });
 
 styleController.styles_update_get = async_handler(async (req, res, next) => {
-  res.send("NOT YET IMPLEMENTED, STYLES UPDATE GET");
+  const parsedUrlPath = req._parsedUrl.path;
+
+  const currentStyleId = parsedUrlPath.split("/")[1];
+
+  const currentStyle = await Style.findById(currentStyleId).exec();
+
+  const postUrl = req.originalUrl;
+
+  res.render("styles_form", {
+    title: "Update Style",
+    style: currentStyle,
+    postUrl,
+  });
 });
 
 styleController.styles_update_post = async_handler(async (req, res, next) => {
