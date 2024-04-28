@@ -52,20 +52,20 @@ styleController.styles_create_post = [
 
     console.log(req);
 
-    // if errors return shoes_form and list errors
+    // if errors return styles_form and list errors
     if (!result.isEmpty()) {
       console.log(result);
 
       const postUrl = req.originalUrl;
 
-      res.render("shoes_form", {
-        title: "Create Shoe",
+      res.render("styles_form", {
+        title: "Create Style",
         postUrl,
         errors: result.errors,
       });
     }
 
-    // If no errors then create shoe and redirect to shoe detail page
+    // If no errors then create style and redirect to style detail page
     const styleDetails = {
       name: req.body.name,
     };
