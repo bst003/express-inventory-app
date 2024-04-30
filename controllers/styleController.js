@@ -105,8 +105,49 @@ styleController.styles_update_get = async_handler(async (req, res, next) => {
   });
 });
 
-styleController.styles_update_post = async_handler(async (req, res, next) => {
-  res.send("NOT YET IMPLEMENTED, STYLES UPDATE POST");
-});
+styleController.styles_update_post = [
+  body("name")
+    .isLength({ min: 3, max: 150 })
+    .trim()
+    .escape()
+    .withMessage("Name must be between 3 and 150 characters"),
+  async_handler(async (req, res, next) => {
+    const result = validationResult(req);
+
+    console.log(req);
+
+    const parsedUrlPath = req._parsedUrl.path;
+
+    // if errors return styles_form and list errors
+    if (!result.isEmpty()) {
+      console.log(result);
+
+      const postUrl = req.originalUrl;
+
+      const styleDetails = {
+        name: req.body.name,
+      };
+
+      res.render("styles_form", {
+        title: "Update Style",
+        postUrl,
+        brand: styleDetails,
+        errors: result.errors,
+      });
+    }
+
+    // If no errors then create style and redirect to brand detail page
+
+    const currentStyleId = parsedUrlPath.split("/")[1];
+
+    const styleDetails = {
+      name: req.body.name,
+    };
+
+    await Style.findByIdAndUpdate(currentStyleId, styleDetails);
+
+    res.redirect("/styles/" + currentStyleId);
+  }),
+];
 
 module.exports = styleController;

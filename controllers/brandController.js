@@ -129,7 +129,7 @@ brandController.brands_update_post = [
       };
 
       res.render("brands_form", {
-        title: "Create Brand",
+        title: "Update Brand",
         postUrl,
         brand: brandDetails,
         errors: result.errors,
@@ -144,16 +144,9 @@ brandController.brands_update_post = [
       name: req.body.name,
     };
 
-    const [brand, shoesInBrand] = await Promise.all([
-      Brand.findByIdAndUpdate(currentBrandId, brandDetails),
-      Shoe.find({ brand: req.params.id }).exec(),
-    ]);
+    await Brand.findByIdAndUpdate(currentBrandId, brandDetails);
 
-    res.render("brands_detail", {
-      title: "Brand: ",
-      shoesInBrand: shoesInBrand,
-      brand: brand,
-    });
+    res.redirect("/brands/" + currentBrandId);
   }),
 ];
 
