@@ -52,6 +52,10 @@ styleController.styles_create_post = [
 
     console.log(req);
 
+    const submittedStyleDetails = {
+      name: req.body.name,
+    };
+
     // if errors return styles_form and list errors
     if (!result.isEmpty()) {
       console.log(result);
@@ -61,23 +65,16 @@ styleController.styles_create_post = [
       res.render("styles_form", {
         title: "Create Style",
         postUrl,
+        style: submittedStyleDetails,
         errors: result.errors,
       });
     }
 
     // If no errors then create style and redirect to style detail page
-    const styleDetails = {
-      name: req.body.name,
-    };
-
     const newStyle = new Style(styleDetails);
     await newStyle.save();
 
-    res.render("styles_detail", {
-      title: "Styles: ",
-      shoesInStyle: [],
-      style: styleDetails,
-    });
+    res.redirect("/styles/" + newStyle._id);
   }),
 ];
 
@@ -99,7 +96,7 @@ styleController.styles_update_get = async_handler(async (req, res, next) => {
   const postUrl = req.originalUrl;
 
   res.render("styles_form", {
-    title: "Update Style",
+    title: "Update Style: " + currentStyle.name,
     style: currentStyle,
     postUrl,
   });
@@ -118,33 +115,31 @@ styleController.styles_update_post = [
 
     const parsedUrlPath = req._parsedUrl.path;
 
+    const currentStyleId = parsedUrlPath.split("/")[1];
+
+    const submittedStyleDetails = {
+      name: req.body.name,
+    };
+
     // if errors return styles_form and list errors
     if (!result.isEmpty()) {
       console.log(result);
 
       const postUrl = req.originalUrl;
 
-      const styleDetails = {
-        name: req.body.name,
-      };
+      const currentStyle = await Style.findById(currentBrandId).exec();
 
       res.render("styles_form", {
-        title: "Update Style",
+        title: "Update Style: " + currentStyle.name,
         postUrl,
-        brand: styleDetails,
+        style: submittedStyleDetails,
         errors: result.errors,
       });
     }
 
     // If no errors then create style and redirect to brand detail page
 
-    const currentStyleId = parsedUrlPath.split("/")[1];
-
-    const styleDetails = {
-      name: req.body.name,
-    };
-
-    await Style.findByIdAndUpdate(currentStyleId, styleDetails);
+    await Style.findByIdAndUpdate(currentStyleId, submittedStyleDetails);
 
     res.redirect("/styles/" + currentStyleId);
   }),

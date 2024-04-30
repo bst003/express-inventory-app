@@ -182,6 +182,16 @@ shoeController.shoes_update_post = [
 
     const parsedUrlPath = req._parsedUrl.path;
 
+    const currentShoeId = parsedUrlPath.split("/")[1];
+
+    const submittedShoeDetails = {
+      name: req.body.name,
+      description: req.body.description,
+      price: req.body.price,
+      brand: req.body.brand,
+      style: req.body.style,
+    };
+
     // if errors return shoes_form and list errors
     if (!result.isEmpty()) {
       console.log(result);
@@ -197,25 +207,16 @@ shoeController.shoes_update_post = [
       res.render("shoes_form", {
         title: "Update Shoe: " + currentShoe.name,
         postUrl,
+        shoe: submittedShoeDetails,
         styles,
         errors: result.errors,
         brands,
       });
     }
 
-    // If no errors then create style and redirect to brand detail page
+    // If no errors then create shoe and redirect to shoe detail page
 
-    const currentShoeId = parsedUrlPath.split("/")[1];
-
-    const shoeDetails = {
-      name: req.body.name,
-      description: req.body.description,
-      price: req.body.price,
-      brand: req.body.brand,
-      style: req.body.style,
-    };
-
-    await Shoe.findByIdAndUpdate(currentShoeId, shoeDetails);
+    await Shoe.findByIdAndUpdate(currentShoeId, submittedShoeDetails);
 
     res.redirect("/shoes/" + currentShoeId);
   }),

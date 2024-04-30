@@ -52,6 +52,10 @@ brandController.brands_create_post = [
 
     console.log(req);
 
+    const submittedBrandDetails = {
+      name: req.body.name,
+    };
+
     // if errors return brands_form and list errors
     if (!result.isEmpty()) {
       console.log(result);
@@ -61,14 +65,12 @@ brandController.brands_create_post = [
       res.render("brands_form", {
         title: "Create Brand",
         postUrl,
+        brand: submittedBrandDetails,
         errors: result.errors,
       });
     }
 
     // If no errors then create brand and redirect to brand detail page
-    const brandDetails = {
-      name: req.body.name,
-    };
 
     const newBrand = new Brand(brandDetails);
     await newBrand.save();
