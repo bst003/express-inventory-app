@@ -148,8 +148,76 @@ shoeController.shoes_update_get = async_handler(async (req, res, next) => {
   });
 });
 
-shoeController.shoes_update_post = async_handler(async (req, res, next) => {
-  res.send("NOT YET IMPLEMENTED, SHOES UPDATE POST");
-});
+shoeController.shoes_update_post = [
+  body("name")
+    .isLength({ min: 3, max: 150 })
+    .trim()
+    .escape()
+    .withMessage("Name must be between 3 and 150 characters"),
+  body("description")
+    .optional({ checkFalsy: true })
+    .isLength({ max: 300 })
+    .notEmpty()
+    .trim()
+    .escape()
+    .withMessage("Descriptions must not be over 300 characters"),
+  body("price")
+    .isInt({ min: 1 })
+    .trim()
+    .withMessage("Price needs to be at least 1"),
+  body("brand")
+    .notEmpty()
+    .trim()
+    .escape()
+    .withMessage("Brand must not be empty"),
+  body("style")
+    .notEmpty()
+    .trim()
+    .escape()
+    .withMessage("Style must not be empty"),
+  async_handler(async (req, res, next) => {
+    const result = validationResult(req);
+
+    console.log(req);
+
+    const parsedUrlPath = req._parsedUrl.path;
+
+    // if errors return shoes_form and list errors
+    if (!result.isEmpty()) {
+      console.log(result);
+
+      const [styles, brands] = await Promise.all([
+        Style.find().sort({ name: "asc" }).exec(),
+        Brand.find().sort({ name: "asc" }).exec(),
+      ]);
+
+      const postUrl = req.originalUrl;
+
+      res.render("shoes_form", {
+        title: "Update Shoe",
+        postUrl,
+        styles,
+        errors: result.errors,
+        brands,
+      });
+    }
+
+    // If no errors then create style and redirect to brand detail page
+
+    const currentShoeId = parsedUrlPath.split("/")[1];
+
+    const shoeDetails = {
+      name: req.body.name,
+      description: req.body.description,
+      price: req.body.price,
+      brand: req.body.brand,
+      style: req.body.style,
+    };
+
+    await Shoe.findByIdAndUpdate(currentShoeId, shoeDetails);
+
+    res.redirect("/shoes/" + currentShoeId);
+  }),
+];
 
 module.exports = shoeController;
