@@ -26,7 +26,7 @@ shoeController.shoes_detail = async_handler(async (req, res, next) => {
   console.log(shoe);
 
   res.render("shoes_detail", {
-    title: "Shoe: ",
+    title: "Shoe: " + shoe.name,
     shoe: shoe,
   });
 });
@@ -186,7 +186,8 @@ shoeController.shoes_update_post = [
     if (!result.isEmpty()) {
       console.log(result);
 
-      const [styles, brands] = await Promise.all([
+      const [currentShoe, styles, brands] = await Promise.all([
+        Shoe.findById(currentShoeId).exec(),
         Style.find().sort({ name: "asc" }).exec(),
         Brand.find().sort({ name: "asc" }).exec(),
       ]);
@@ -194,7 +195,7 @@ shoeController.shoes_update_post = [
       const postUrl = req.originalUrl;
 
       res.render("shoes_form", {
-        title: "Update Shoe",
+        title: "Update Shoe: " + currentShoe.name,
         postUrl,
         styles,
         errors: result.errors,

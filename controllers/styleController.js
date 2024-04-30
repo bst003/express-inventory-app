@@ -26,7 +26,7 @@ styleController.styles_detail = async_handler(async (req, res, next) => {
   console.log(style);
 
   res.render("styles_detail", {
-    title: "Style: ",
+    title: "Style: " + style.name,
     style,
     shoesInStyle,
   });

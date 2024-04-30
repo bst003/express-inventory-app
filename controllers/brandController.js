@@ -26,7 +26,7 @@ brandController.brands_detail = async_handler(async (req, res, next) => {
   console.log(brand);
 
   res.render("brands_detail", {
-    title: "Brand: ",
+    title: "Brand: " + brand.name,
     brand,
     shoesInBrand,
   });
@@ -73,11 +73,7 @@ brandController.brands_create_post = [
     const newBrand = new Brand(brandDetails);
     await newBrand.save();
 
-    res.render("brands_detail", {
-      title: "Brand: ",
-      shoesInBrand: [],
-      brand: brandDetails,
-    });
+    res.redirect("/brands/" + newBrand._id);
   }),
 ];
 
@@ -99,7 +95,7 @@ brandController.brands_update_get = async_handler(async (req, res, next) => {
   const postUrl = req.originalUrl;
 
   res.render("brands_form", {
-    title: "Update Brand",
+    title: "Update Brand: " + currentBrand.name,
     brand: currentBrand,
     postUrl,
   });
@@ -118,33 +114,31 @@ brandController.brands_update_post = [
 
     const parsedUrlPath = req._parsedUrl.path;
 
+    const currentBrandId = parsedUrlPath.split("/")[1];
+
+    const submittedBrandDetails = {
+      name: req.body.name,
+    };
+
     // if errors return brands_form and list errors
     if (!result.isEmpty()) {
       console.log(result);
 
       const postUrl = req.originalUrl;
 
-      const brandDetails = {
-        name: req.body.name,
-      };
+      const currentBrand = await Brand.findById(currentBrandId).exec();
 
       res.render("brands_form", {
-        title: "Update Brand",
+        title: "Update Brand: " + currentBrand.name,
         postUrl,
-        brand: brandDetails,
+        brand: submittedBrandDetails,
         errors: result.errors,
       });
     }
 
     // If no errors then create brand and redirect to brand detail page
 
-    const currentBrandId = parsedUrlPath.split("/")[1];
-
-    const brandDetails = {
-      name: req.body.name,
-    };
-
-    await Brand.findByIdAndUpdate(currentBrandId, brandDetails);
+    await Brand.findByIdAndUpdate(currentBrandId, submittedBrandDetails);
 
     res.redirect("/brands/" + currentBrandId);
   }),
