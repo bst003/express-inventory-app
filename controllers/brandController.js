@@ -80,7 +80,23 @@ brandController.brands_create_post = [
 ];
 
 brandController.brands_delete_get = async_handler(async (req, res, next) => {
-  res.send("NOT YET IMPLEMENTED, BRANDS DELETE GET");
+  const parsedUrlPath = req._parsedUrl.path;
+
+  const currentBrandId = parsedUrlPath.split("/")[1];
+
+  const [currentBrand, shoesInBrand] = await Promise.all([
+    Brand.findById(currentBrandId).exec(),
+    Shoe.find({ brand: currentBrandId }).exec(),
+  ]);
+
+  const postUrl = req.originalUrl;
+
+  res.render("brands_delete", {
+    title: "Delete Brand: " + currentBrand.name,
+    postUrl,
+    brand: currentBrand,
+    shoesInBrand,
+  });
 });
 
 brandController.brands_delete_post = async_handler(async (req, res, next) => {

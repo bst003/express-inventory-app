@@ -1,0 +1,12 @@
+extends layout
+
+block content
+    h1 #{title}
+    if shoesInBrand.length
+        p You cannot delete this brand as there are shoes tied to it.
+    else
+        p Are you sure you want to delete this brand?
+        form(action=postUrl method="post")
+            input(type="Submit" value="Delete Brand")  
+        hr 
+    a(href=brand.url) Back to brand detail

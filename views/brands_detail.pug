@@ -12,3 +12,7 @@ block content
         p There are no shoes in this brand.
     hr 
     a(href=brand.url + "/update") Update
+    if !shoesInBrand.length
+        br
+        br 
+        a(href=brand.url + "/delete") Delete
