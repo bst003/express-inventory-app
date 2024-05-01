@@ -82,19 +82,19 @@ brandController.brands_create_post = [
 brandController.brands_delete_get = async_handler(async (req, res, next) => {
   const parsedUrlPath = req._parsedUrl.path;
 
-  const currentBrandId = parsedUrlPath.split("/")[1];
+  const brandId = parsedUrlPath.split("/")[1];
 
-  const [currentBrand, shoesInBrand] = await Promise.all([
-    Brand.findById(currentBrandId).exec(),
-    Shoe.find({ brand: currentBrandId }).exec(),
+  const [brand, shoesInBrand] = await Promise.all([
+    Brand.findById(brandId).exec(),
+    Shoe.find({ brand: brandId }).exec(),
   ]);
 
   const postUrl = req.originalUrl;
 
   res.render("brands_delete", {
-    title: "Delete Brand: " + currentBrand.name,
+    title: "Delete Brand: " + brand.name,
     postUrl,
-    brand: currentBrand,
+    brand,
     shoesInBrand,
   });
 });
@@ -102,11 +102,11 @@ brandController.brands_delete_get = async_handler(async (req, res, next) => {
 brandController.brands_delete_post = async_handler(async (req, res, next) => {
   const parsedUrlPath = req._parsedUrl.path;
 
-  const currentBrandId = parsedUrlPath.split("/")[1];
+  const brandId = parsedUrlPath.split("/")[1];
 
-  const [currentBrand, shoesInBrand] = await Promise.all([
-    Brand.findById(currentBrandId).exec(),
-    Shoe.find({ brand: currentBrandId }).exec(),
+  const [brand, shoesInBrand] = await Promise.all([
+    Brand.findById(brandId).exec(),
+    Shoe.find({ brand: brandId }).exec(),
   ]);
 
   // Redirect back to delete page if there are shoes in brand
@@ -114,16 +114,16 @@ brandController.brands_delete_post = async_handler(async (req, res, next) => {
     const postUrl = req.originalUrl;
 
     res.render("brands_delete", {
-      title: "Delete Brand: " + currentBrand.name,
+      title: "Delete Brand: " + brand.name,
       postUrl,
-      brand: currentBrand,
+      brand,
       shoesInBrand,
     });
 
     return;
   }
 
-  await Brand.findByIdAndDelete(currentBrandId);
+  await Brand.findByIdAndDelete(brandId);
 
   res.redirect("/brands");
 });
@@ -131,15 +131,15 @@ brandController.brands_delete_post = async_handler(async (req, res, next) => {
 brandController.brands_update_get = async_handler(async (req, res, next) => {
   const parsedUrlPath = req._parsedUrl.path;
 
-  const currentBrandId = parsedUrlPath.split("/")[1];
+  const brandId = parsedUrlPath.split("/")[1];
 
-  const currentBrand = await Brand.findById(currentBrandId).exec();
+  const brand = await Brand.findById(brandId).exec();
 
   const postUrl = req.originalUrl;
 
   res.render("brands_form", {
-    title: "Update Brand: " + currentBrand.name,
-    brand: currentBrand,
+    title: "Update Brand: " + brand.name,
+    brand,
     postUrl,
   });
 });
@@ -157,7 +157,7 @@ brandController.brands_update_post = [
 
     const parsedUrlPath = req._parsedUrl.path;
 
-    const currentBrandId = parsedUrlPath.split("/")[1];
+    const brandId = parsedUrlPath.split("/")[1];
 
     const submittedBrandDetails = {
       name: req.body.name,
@@ -169,10 +169,10 @@ brandController.brands_update_post = [
 
       const postUrl = req.originalUrl;
 
-      const currentBrand = await Brand.findById(currentBrandId).exec();
+      const brand = await Brand.findById(brandId).exec();
 
       res.render("brands_form", {
-        title: "Update Brand: " + currentBrand.name,
+        title: "Update Brand: " + brand.name,
         postUrl,
         brand: submittedBrandDetails,
         errors: result.errors,
@@ -181,9 +181,9 @@ brandController.brands_update_post = [
 
     // If no errors then create brand and redirect to brand detail page
 
-    await Brand.findByIdAndUpdate(currentBrandId, submittedBrandDetails);
+    await Brand.findByIdAndUpdate(brandId, submittedBrandDetails);
 
-    res.redirect("/brands/" + currentBrandId);
+    res.redirect("/brands/" + brandId);
   }),
 ];
 
