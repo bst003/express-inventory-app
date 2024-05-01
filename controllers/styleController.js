@@ -137,7 +137,7 @@ styleController.styles_update_post = [
       });
     }
 
-    // If no errors then create style and redirect to brand detail page
+    // If no errors then create style and redirect to style detail page
 
     await Style.findByIdAndUpdate(currentStyleId, submittedStyleDetails);
 

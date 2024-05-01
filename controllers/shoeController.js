@@ -119,7 +119,19 @@ shoeController.shoes_create_post = [
 ];
 
 shoeController.shoes_delete_get = async_handler(async (req, res, next) => {
-  res.send("NOT YET IMPLEMENTED, SHOES DELETE GET");
+  const parsedUrlPath = req._parsedUrl.path;
+
+  const currentShoeId = parsedUrlPath.split("/")[1];
+
+  const currentShoe = await Shoe.findById(currentShoeId).exec();
+
+  const postUrl = req.originalUrl;
+
+  res.render("shoes_delete", {
+    title: "Delete Shoe: " + currentShoe.name,
+    postUrl,
+    shoe: currentShoe,
+  });
 });
 
 shoeController.shoes_delete_post = async_handler(async (req, res, next) => {

@@ -1,0 +1,9 @@
+extends layout
+
+block content
+    h1 #{title}
+    p Are you sure you want to delete this shoe?
+    form(action=postUrl method="post")
+        input(type="Submit" value="Delete Shoe")  
+    hr 
+    a(href=shoe.url) Back to shoe detail
