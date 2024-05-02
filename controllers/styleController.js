@@ -18,7 +18,7 @@ styleController.styles_list = async_handler(async (req, res, next) => {
 
   console.log(styles);
 
-  res.render("styles_list", {
+  res.render("styles/styles_list", {
     title: "All Styles",
     styles: styles,
   });
@@ -32,7 +32,7 @@ styleController.styles_detail = async_handler(async (req, res, next) => {
 
   console.log(style);
 
-  res.render("styles_detail", {
+  res.render("styles/styles_detail", {
     title: "Style: " + style.name,
     style,
     shoesInStyle,
@@ -42,7 +42,7 @@ styleController.styles_detail = async_handler(async (req, res, next) => {
 styleController.styles_create_get = async_handler(async (req, res, next) => {
   const postUrl = req.originalUrl;
 
-  res.render("styles_form", {
+  res.render("styles/styles_form", {
     title: "Create Style",
     postUrl,
   });
@@ -69,7 +69,7 @@ styleController.styles_create_post = [
 
       const postUrl = req.originalUrl;
 
-      res.render("styles_form", {
+      res.render("styles/styles_form", {
         title: "Create Style",
         postUrl,
         style: submittedStyleDetails,
@@ -97,7 +97,7 @@ styleController.styles_delete_get = async_handler(async (req, res, next) => {
 
   const postUrl = req.originalUrl;
 
-  res.render("styles_delete", {
+  res.render("styles/styles_delete", {
     title: "Delete Style: " + style.name,
     postUrl,
     style,
@@ -131,7 +131,7 @@ styleController.styles_update_get = async_handler(async (req, res, next) => {
 
   const postUrl = req.originalUrl;
 
-  res.render("styles_form", {
+  res.render("styles/styles_form", {
     title: "Update Style: " + style.name,
     style: style,
     postUrl,
@@ -165,7 +165,7 @@ styleController.styles_update_post = [
 
       const style = await Style.findById(styleId).exec();
 
-      res.render("styles_form", {
+      res.render("styles/styles_form", {
         title: "Update Style: " + style.name,
         postUrl,
         style: submittedStyleDetails,

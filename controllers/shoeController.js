@@ -12,7 +12,7 @@ shoeController.shoes_list = async_handler(async (req, res, next) => {
 
   console.log(shoes);
 
-  res.render("shoes_list", {
+  res.render("shoes/shoes_list", {
     title: "All Shoes",
     shoes: shoes,
   });
@@ -25,7 +25,7 @@ shoeController.shoes_detail = async_handler(async (req, res, next) => {
 
   console.log(shoe);
 
-  res.render("shoes_detail", {
+  res.render("shoes/shoes_detail", {
     title: "Shoe: " + shoe.name,
     shoe: shoe,
   });
@@ -39,7 +39,7 @@ shoeController.shoes_create_get = async_handler(async (req, res, next) => {
 
   const postUrl = req.originalUrl;
 
-  res.render("shoes_form", {
+  res.render("shoes/shoes_form", {
     title: "Create Shoe",
     postUrl,
     styles,
@@ -90,7 +90,7 @@ shoeController.shoes_create_post = [
 
       const postUrl = req.originalUrl;
 
-      res.render("shoes_form", {
+      res.render("shoes/shoes_form", {
         title: "Create Shoe",
         postUrl,
         styles,
@@ -124,7 +124,7 @@ shoeController.shoes_delete_get = async_handler(async (req, res, next) => {
 
   const postUrl = req.originalUrl;
 
-  res.render("shoes_delete", {
+  res.render("shoes/shoes_delete", {
     title: "Delete Shoe: " + shoe.name,
     postUrl,
     shoe,
@@ -154,7 +154,7 @@ shoeController.shoes_update_get = async_handler(async (req, res, next) => {
 
   const postUrl = req.originalUrl;
 
-  res.render("shoes_form", {
+  res.render("shoes/shoes_form", {
     title: "Update Shoe: " + shoe.name,
     postUrl,
     shoe,
@@ -219,7 +219,7 @@ shoeController.shoes_update_post = [
 
       const postUrl = req.originalUrl;
 
-      res.render("shoes_form", {
+      res.render("shoes/shoes_form", {
         title: "Update Shoe: " + shoe.name,
         postUrl,
         shoe: submittedShoeDetails,

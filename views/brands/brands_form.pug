@@ -1,4 +1,4 @@
-extends layout
+extends ../layout
 
 block content
     h1 #{title} 
@@ -6,7 +6,7 @@ block content
         div(class="input-contain")
             label(for="name") Name 
                 span(class="required") *
-            input(id="name" name="name" type="text" value=(style && style.name ? style.name : "") minlength="3" maxlength="150" required)
+            input(id="name" name="name" type="text" value=(brand && brand.name ? brand.name : "") minlength="3" maxlength="150" required)
         input(type="Submit" value="Submit")  
     if errors 
         each error in errors 

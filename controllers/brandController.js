@@ -11,7 +11,7 @@ brandController.brands_list = async_handler(async (req, res, next) => {
 
   console.log(brands);
 
-  res.render("brands_list", {
+  res.render("brands/brands_list", {
     title: "All Brands",
     brands: brands,
   });
@@ -25,7 +25,7 @@ brandController.brands_detail = async_handler(async (req, res, next) => {
 
   console.log(brand);
 
-  res.render("brands_detail", {
+  res.render("brands/brands_detail", {
     title: "Brand: " + brand.name,
     brand,
     shoesInBrand,
@@ -35,7 +35,7 @@ brandController.brands_detail = async_handler(async (req, res, next) => {
 brandController.brands_create_get = async_handler(async (req, res, next) => {
   const postUrl = req.originalUrl;
 
-  res.render("brands_form", {
+  res.render("brands/brands_form", {
     title: "Create Brand",
     postUrl,
   });
@@ -62,7 +62,7 @@ brandController.brands_create_post = [
 
       const postUrl = req.originalUrl;
 
-      res.render("brands_form", {
+      res.render("brands/brands_form", {
         title: "Create Brand",
         postUrl,
         brand: submittedBrandDetails,
@@ -91,7 +91,7 @@ brandController.brands_delete_get = async_handler(async (req, res, next) => {
 
   const postUrl = req.originalUrl;
 
-  res.render("brands_delete", {
+  res.render("brands/brands_delete", {
     title: "Delete Brand: " + brand.name,
     postUrl,
     brand,
@@ -125,7 +125,7 @@ brandController.brands_update_get = async_handler(async (req, res, next) => {
 
   const postUrl = req.originalUrl;
 
-  res.render("brands_form", {
+  res.render("brands/brands_form", {
     title: "Update Brand: " + brand.name,
     brand,
     postUrl,
@@ -159,7 +159,7 @@ brandController.brands_update_post = [
 
       const brand = await Brand.findById(brandId).exec();
 
-      res.render("brands_form", {
+      res.render("brands/brands_form", {
         title: "Update Brand: " + brand.name,
         postUrl,
         brand: submittedBrandDetails,
