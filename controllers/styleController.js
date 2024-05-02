@@ -106,7 +106,20 @@ styleController.styles_delete_get = async_handler(async (req, res, next) => {
 });
 
 styleController.styles_delete_post = async_handler(async (req, res, next) => {
-  res.send("NOT YET IMPLEMENTED, STYLES DELETE POST");
+  const parsedUrlPath = req._parsedUrl.path;
+
+  const styleId = parsedUrlPath.split("/")[1];
+
+  const shoesInStyle = await Shoe.find({ style: styleId }).exec();
+
+  // Redirect back to detail page if there are shoes in style
+  if (shoesInStyle.length > 0) {
+    res.redirect("/styles/" + styleId);
+  }
+
+  await Style.findByIdAndDelete(styleId);
+
+  res.redirect("/styles");
 });
 
 styleController.styles_update_get = async_handler(async (req, res, next) => {

@@ -104,23 +104,11 @@ brandController.brands_delete_post = async_handler(async (req, res, next) => {
 
   const brandId = parsedUrlPath.split("/")[1];
 
-  const [brand, shoesInBrand] = await Promise.all([
-    Brand.findById(brandId).exec(),
-    Shoe.find({ brand: brandId }).exec(),
-  ]);
+  const shoesInBrand = await Shoe.find({ brand: brandId }).exec();
 
-  // Redirect back to delete page if there are shoes in brand
+  // Redirect back to detail page if there are shoes in brand
   if (shoesInBrand.length > 0) {
-    const postUrl = req.originalUrl;
-
-    res.render("brands_delete", {
-      title: "Delete Brand: " + brand.name,
-      postUrl,
-      brand,
-      shoesInBrand,
-    });
-
-    return;
+    res.redirect("/brands/" + brandId);
   }
 
   await Brand.findByIdAndDelete(brandId);
