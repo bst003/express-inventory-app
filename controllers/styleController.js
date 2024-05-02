@@ -86,7 +86,23 @@ styleController.styles_create_post = [
 ];
 
 styleController.styles_delete_get = async_handler(async (req, res, next) => {
-  res.send("NOT YET IMPLEMENTED, STYLES DELETE GET");
+  const parsedUrlPath = req._parsedUrl.path;
+
+  const styleId = parsedUrlPath.split("/")[1];
+
+  const [style, shoesInStyle] = await Promise.all([
+    Style.findById(styleId).exec(),
+    Shoe.find({ style: styleId }).exec(),
+  ]);
+
+  const postUrl = req.originalUrl;
+
+  res.render("styles_delete", {
+    title: "Delete Style: " + style.name,
+    postUrl,
+    style,
+    shoesInStyle,
+  });
 });
 
 styleController.styles_delete_post = async_handler(async (req, res, next) => {

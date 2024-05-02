@@ -12,3 +12,7 @@ block content
         p There are no shoes of this style.
     hr 
     a(href=style.url + "/update") Update
+    if !shoesInStyle.length
+        br
+        br 
+        a(href=style.url + "/delete") Delete

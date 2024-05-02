@@ -1,0 +1,9 @@
+extends layout
+
+block content
+    h1 #{title}
+    p Are you sure you want to delete this style?
+    form(action=postUrl method="post")
+        input(type="Submit" value="Delete Style")  
+    hr 
+    a(href=style.url) Back to style detail
