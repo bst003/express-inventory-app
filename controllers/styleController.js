@@ -3,13 +3,6 @@ const { query, validationResult, body } = require("express-validator");
 
 const Style = require("../models/style");
 const Shoe = require("../models/shoe");
-4;
-
-/*
-
-REFACTOR VARIABLES NAMES TO BE MORE CONSISTENT WITH BRAND VAR NAMES
-
-*/
 
 const styleController = {};
 
