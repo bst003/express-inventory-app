@@ -118,25 +118,25 @@ shoeController.shoes_create_post = [
 shoeController.shoes_delete_get = async_handler(async (req, res, next) => {
   const parsedUrlPath = req._parsedUrl.path;
 
-  const currentShoeId = parsedUrlPath.split("/")[1];
+  const shoeId = parsedUrlPath.split("/")[1];
 
-  const currentShoe = await Shoe.findById(currentShoeId).exec();
+  const shoe = await Shoe.findById(shoeId).exec();
 
   const postUrl = req.originalUrl;
 
   res.render("shoes_delete", {
-    title: "Delete Shoe: " + currentShoe.name,
+    title: "Delete Shoe: " + shoe.name,
     postUrl,
-    shoe: currentShoe,
+    shoe,
   });
 });
 
 shoeController.shoes_delete_post = async_handler(async (req, res, next) => {
   const parsedUrlPath = req._parsedUrl.path;
 
-  const currentShoeId = parsedUrlPath.split("/")[1];
+  const shoeId = parsedUrlPath.split("/")[1];
 
-  await Shoe.findByIdAndDelete(currentShoeId);
+  await Shoe.findByIdAndDelete(shoeId);
 
   res.redirect("/shoes");
 });
@@ -144,10 +144,10 @@ shoeController.shoes_delete_post = async_handler(async (req, res, next) => {
 shoeController.shoes_update_get = async_handler(async (req, res, next) => {
   const parsedUrlPath = req._parsedUrl.path;
 
-  const currentShoeId = parsedUrlPath.split("/")[1];
+  const shoeId = parsedUrlPath.split("/")[1];
 
-  const [currentShoe, styles, brands] = await Promise.all([
-    Shoe.findById(currentShoeId).exec(),
+  const [shoe, styles, brands] = await Promise.all([
+    Shoe.findById(shoeId).exec(),
     Style.find().sort({ name: "asc" }).exec(),
     Brand.find().sort({ name: "asc" }).exec(),
   ]);
@@ -155,9 +155,9 @@ shoeController.shoes_update_get = async_handler(async (req, res, next) => {
   const postUrl = req.originalUrl;
 
   res.render("shoes_form", {
-    title: "Update Shoe: " + currentShoe.name,
+    title: "Update Shoe: " + shoe.name,
     postUrl,
-    shoe: currentShoe,
+    shoe,
     styles,
     brands,
   });
@@ -197,7 +197,7 @@ shoeController.shoes_update_post = [
 
     const parsedUrlPath = req._parsedUrl.path;
 
-    const currentShoeId = parsedUrlPath.split("/")[1];
+    const shoeId = parsedUrlPath.split("/")[1];
 
     const submittedShoeDetails = {
       name: req.body.name,
@@ -211,8 +211,8 @@ shoeController.shoes_update_post = [
     if (!result.isEmpty()) {
       console.log(result);
 
-      const [currentShoe, styles, brands] = await Promise.all([
-        Shoe.findById(currentShoeId).exec(),
+      const [shoe, styles, brands] = await Promise.all([
+        Shoe.findById(shoeId).exec(),
         Style.find().sort({ name: "asc" }).exec(),
         Brand.find().sort({ name: "asc" }).exec(),
       ]);
@@ -220,7 +220,7 @@ shoeController.shoes_update_post = [
       const postUrl = req.originalUrl;
 
       res.render("shoes_form", {
-        title: "Update Shoe: " + currentShoe.name,
+        title: "Update Shoe: " + shoe.name,
         postUrl,
         shoe: submittedShoeDetails,
         styles,
@@ -231,9 +231,9 @@ shoeController.shoes_update_post = [
 
     // If no errors then create shoe and redirect to shoe detail page
 
-    await Shoe.findByIdAndUpdate(currentShoeId, submittedShoeDetails);
+    await Shoe.findByIdAndUpdate(shoeId, submittedShoeDetails);
 
-    res.redirect("/shoes/" + currentShoeId);
+    res.redirect("/shoes/" + shoeId);
   }),
 ];
 
