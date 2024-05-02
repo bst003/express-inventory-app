@@ -3,6 +3,13 @@ const { query, validationResult, body } = require("express-validator");
 
 const Style = require("../models/style");
 const Shoe = require("../models/shoe");
+4;
+
+/*
+
+REFACTOR VARIABLES NAMES TO BE MORE CONSISTENT WITH BRAND VAR NAMES
+
+*/
 
 const styleController = {};
 
@@ -71,7 +78,7 @@ styleController.styles_create_post = [
     }
 
     // If no errors then create style and redirect to style detail page
-    const newStyle = new Style(styleDetails);
+    const newStyle = new Style(submittedStyleDetails);
     await newStyle.save();
 
     res.redirect("/styles/" + newStyle._id);
@@ -89,15 +96,15 @@ styleController.styles_delete_post = async_handler(async (req, res, next) => {
 styleController.styles_update_get = async_handler(async (req, res, next) => {
   const parsedUrlPath = req._parsedUrl.path;
 
-  const currentStyleId = parsedUrlPath.split("/")[1];
+  const styleId = parsedUrlPath.split("/")[1];
 
-  const currentStyle = await Style.findById(currentStyleId).exec();
+  const style = await Style.findById(styleId).exec();
 
   const postUrl = req.originalUrl;
 
   res.render("styles_form", {
-    title: "Update Style: " + currentStyle.name,
-    style: currentStyle,
+    title: "Update Style: " + style.name,
+    style: style,
     postUrl,
   });
 });
@@ -115,7 +122,7 @@ styleController.styles_update_post = [
 
     const parsedUrlPath = req._parsedUrl.path;
 
-    const currentStyleId = parsedUrlPath.split("/")[1];
+    const styleId = parsedUrlPath.split("/")[1];
 
     const submittedStyleDetails = {
       name: req.body.name,
@@ -127,10 +134,10 @@ styleController.styles_update_post = [
 
       const postUrl = req.originalUrl;
 
-      const currentStyle = await Style.findById(currentBrandId).exec();
+      const style = await Style.findById(styleId).exec();
 
       res.render("styles_form", {
-        title: "Update Style: " + currentStyle.name,
+        title: "Update Style: " + style.name,
         postUrl,
         style: submittedStyleDetails,
         errors: result.errors,
@@ -139,9 +146,9 @@ styleController.styles_update_post = [
 
     // If no errors then create style and redirect to style detail page
 
-    await Style.findByIdAndUpdate(currentStyleId, submittedStyleDetails);
+    await Style.findByIdAndUpdate(styleId, submittedStyleDetails);
 
-    res.redirect("/styles/" + currentStyleId);
+    res.redirect("/styles/" + styleId);
   }),
 ];
 
