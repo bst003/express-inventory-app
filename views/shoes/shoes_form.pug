@@ -2,7 +2,7 @@ extends ../layout
 
 block content
     h1 #{title} 
-    form(action=postUrl method="post")
+    form(action=postUrl method="post" enctype="multipart/form-data")
         div(class="input-contain")
             label(for="name") Name 
                 span(class="required") *
@@ -14,6 +14,9 @@ block content
             label(for="price") Price 
                 span(class="required") *
             input(id="price" name="price" type="number" value=(shoe && shoe.price ? shoe.price : "") min="1" required)
+        div(class="input-contain")
+            label(for="thumbnail") Thumbnail 
+            input(id="thumbnail" name="thumbnail" type="file")
         div(class="input-contain")
             label(for="brand") Brand 
                 span(class="required") *

@@ -1,5 +1,7 @@
 const async_handler = require("express-async-handler");
 const { query, validationResult, body } = require("express-validator");
+const multer = require("multer");
+const upload = multer({ dest: "uploads/" });
 
 const Shoe = require("../models/shoe");
 const Style = require("../models/style");
@@ -48,6 +50,8 @@ shoeController.shoes_create_get = async_handler(async (req, res, next) => {
 });
 
 shoeController.shoes_create_post = [
+  upload.single("thumbnail"),
+
   body("name")
     .isLength({ min: 3, max: 150 })
     .trim()
@@ -74,10 +78,14 @@ shoeController.shoes_create_post = [
     .trim()
     .escape()
     .withMessage("Style must not be empty"),
+
   async_handler(async (req, res, next) => {
     const result = validationResult(req);
 
     console.log(req);
+
+    // uploaded file info
+    console.log(req.file);
 
     // if errors return shoes_form and list errors
     if (!result.isEmpty()) {
@@ -98,6 +106,14 @@ shoeController.shoes_create_post = [
         brands,
       });
     }
+
+    /*
+
+    1. upload thumbnail to cloudinary
+    2. add image url to shoeDetails if file uploaded, if no upload then add empty property
+    3. Remove local upload
+
+    */
 
     // If no errors then create shoe and redirect to shoe detail page
     const shoeDetails = {
