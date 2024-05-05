@@ -2,6 +2,8 @@ const async_handler = require("express-async-handler");
 const { query, validationResult, body } = require("express-validator");
 const multer = require("multer");
 const upload = multer({ dest: "uploads/" });
+const cloudinary = require("cloudinary");
+const cloudinaryConfig = require("../cloudinary.config");
 
 const Shoe = require("../models/shoe");
 const Style = require("../models/style");
@@ -107,13 +109,56 @@ shoeController.shoes_create_post = [
       });
     }
 
-    /*
+    // 1. upload thumbnail to cloudinary
 
-    1. upload thumbnail to cloudinary
-    2. add image url to shoeDetails if file uploaded, if no upload then add empty property
-    3. Remove local upload
+    // const response = await fetch("https://api.cloudinary.com/v1_1/dzqotuceb/image/upload", {
+    //   method: "POST", // or 'PUT'
+    //   headers: {
+    //     "Content-Type": "application/json",
+    //   },
+    //   body: JSON.stringify(data),
+    // });
 
-    */
+    cloudinary.config({
+      cloud_name: cloudinaryConfig.name,
+      api_key: cloudinaryConfig.key,
+      api_secret: cloudinaryConfig.secret,
+    });
+
+    console.log(cloudinary.config());
+
+    const uploadImage = async (imagePath) => {
+      // Use the uploaded file's name as the asset's public ID and
+      // allow overwriting the asset with new versions
+      const options = {
+        use_filename: true,
+        unique_filename: false,
+        overwrite: true,
+      };
+
+      try {
+        // Upload the image
+        const result = await cloudinary.uploader.upload(imagePath, options);
+        console.log(result);
+        return {
+          public_id: result.public_id,
+          secure_url: result.secure_url,
+        };
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    const uploadedImage = await uploadImage(
+      "https://hips.hearstapps.com/hmg-prod/images/run-nike-running-shoes-646cdd1a19c41.jpg"
+    );
+
+    console.log("hello world");
+
+    console.log(uploadedImage);
+
+    // 2. add image url to shoeDetails if file uploaded, if no upload then add empty property
+    // 3. Remove local upload
 
     // If no errors then create shoe and redirect to shoe detail page
     const shoeDetails = {
