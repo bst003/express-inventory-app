@@ -1,9 +1,28 @@
 const async_handler = require("express-async-handler");
 const { query, validationResult, body } = require("express-validator");
+
 const multer = require("multer");
-const upload = multer({ dest: "uploads/" });
+
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, "uploads/");
+  },
+  filename: function (req, file, cb) {
+    console.log(file);
+
+    const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
+    cb(null, file.fieldname + "-" + uniqueSuffix + ".jpg");
+  },
+});
+
+const upload = multer({ storage: storage });
+
+// const upload = multer({ dest: "uploads/" });
+
 const cloudinary = require("cloudinary");
 const cloudinaryConfig = require("../cloudinary.config");
+
+const fs = require("fs");
 
 const Shoe = require("../models/shoe");
 const Style = require("../models/style");
@@ -84,10 +103,20 @@ shoeController.shoes_create_post = [
   async_handler(async (req, res, next) => {
     const result = validationResult(req);
 
-    console.log(req);
-
-    // uploaded file info
     console.log(req.file);
+
+    const uploadedImagePath = fs.realpath(
+      req.file.path,
+      (error, resolvedPath) => {
+        if (error) {
+          console.log(error);
+        } else {
+          return resolvedPath;
+        }
+      }
+    );
+
+    console.log("uploaded image path: " + uploadedImagePath);
 
     // if errors return shoes_form and list errors
     if (!result.isEmpty()) {
@@ -110,14 +139,6 @@ shoeController.shoes_create_post = [
     }
 
     // 1. upload thumbnail to cloudinary
-
-    // const response = await fetch("https://api.cloudinary.com/v1_1/dzqotuceb/image/upload", {
-    //   method: "POST", // or 'PUT'
-    //   headers: {
-    //     "Content-Type": "application/json",
-    //   },
-    //   body: JSON.stringify(data),
-    // });
 
     cloudinary.config({
       cloud_name: cloudinaryConfig.name,
@@ -149,9 +170,7 @@ shoeController.shoes_create_post = [
       }
     };
 
-    const uploadedImage = await uploadImage(
-      "https://hips.hearstapps.com/hmg-prod/images/run-nike-running-shoes-646cdd1a19c41.jpg"
-    );
+    const uploadedImage = await uploadImage(uploadedImagePath);
 
     console.log("hello world");
 
