@@ -17,12 +17,10 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage: storage });
 
-// const upload = multer({ dest: "uploads/" });
-
 const cloudinary = require("cloudinary");
 const cloudinaryConfig = require("../cloudinary.config");
 
-const fs = require("fs");
+const path = require("node:path");
 
 const Shoe = require("../models/shoe");
 const Style = require("../models/style");
@@ -103,18 +101,7 @@ shoeController.shoes_create_post = [
   async_handler(async (req, res, next) => {
     const result = validationResult(req);
 
-    console.log(req.file);
-
-    const uploadedImagePath = fs.realpath(
-      req.file.path,
-      (error, resolvedPath) => {
-        if (error) {
-          console.log(error);
-        } else {
-          return resolvedPath;
-        }
-      }
-    );
+    let uploadedImagePath = path.resolve(req.file.path);
 
     console.log("uploaded image path: " + uploadedImagePath);
 
@@ -172,12 +159,9 @@ shoeController.shoes_create_post = [
 
     const uploadedImage = await uploadImage(uploadedImagePath);
 
-    console.log("hello world");
-
     console.log(uploadedImage);
 
     // 2. add image url to shoeDetails if file uploaded, if no upload then add empty property
-    // 3. Remove local upload
 
     // If no errors then create shoe and redirect to shoe detail page
     const shoeDetails = {
@@ -188,8 +172,16 @@ shoeController.shoes_create_post = [
       style: req.body.style,
     };
 
+    if (uploadedImage) {
+      console.log("image uploaded to cloudinary");
+      shoeDetails.thumbnail_id = uploadedImage.public_id;
+      shoeDetails.thumbnail_url = uploadedImage.secure_url;
+    }
+
     const newShoe = new Shoe(shoeDetails);
     await newShoe.save();
+
+    // 3. Remove local upload
 
     res.redirect("/shoes/" + newShoe._id);
   }),
