@@ -21,10 +21,27 @@ const cloudinary = require("cloudinary");
 const cloudinaryConfig = require("../cloudinary.config");
 
 const path = require("node:path");
+const fs = require("fs");
 
 const Shoe = require("../models/shoe");
 const Style = require("../models/style");
 const Brand = require("../models/brand");
+
+function deleteFile(filePath) {
+  fs.unlink(filePath, (err) => {
+    if (err) {
+      console.log(err);
+    } else {
+      console.log("File removed: " + filePath);
+    }
+  });
+  // try {
+  //   await fs.unlink(filePath);
+  //   console.log(`File ${filePath} has been deleted.`);
+  // } catch (err) {
+  //   console.error(err);
+  // }
+}
 
 const shoeController = {};
 
@@ -182,6 +199,8 @@ shoeController.shoes_create_post = [
     await newShoe.save();
 
     // 3. Remove local upload
+
+    deleteFile(uploadedImagePath);
 
     res.redirect("/shoes/" + newShoe._id);
   }),
