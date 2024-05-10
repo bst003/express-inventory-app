@@ -3,15 +3,25 @@
   --siteContentWidth: 1260px;
 }
 
+html{
+  height: 100%;
+}
+
 body {
   /* padding: 50px; */
+  height: 100%;
   margin: 0px;
   font-size: 18px;
   font-family: "Lucida Grande", Helvetica, Arial, sans-serif;
+  background-color: #fbfbfb;
 }
 
 body *{
   box-sizing: border-box;
+}
+
+img{
+  max-width: 100%;
 }
 
 /* Header */ 
@@ -163,4 +173,28 @@ form input[type="submit"]{
   cursor: pointer;}
   form input[type="submit"]:hover{
     background-color: #020408;
+  }
+
+/* Grids */ 
+
+.item-grid{
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 30px;
+  padding: 0px;
+}
+
+.grid-item{
+  list-style-type: none;
+} 
+  .grid-item a{
+    color: #000;
+    text-decoration: underline;
+  }
+  .grid-item img {
+    margin-bottom: 10px;
+  }
+  .grid-item p {
+    margin: 0px;
+    text-align: center;
   }

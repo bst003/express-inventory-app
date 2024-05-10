@@ -142,8 +142,6 @@ shoeController.shoes_create_post = [
     const newShoe = new Shoe(shoeDetails);
     await newShoe.save();
 
-    // 3. Remove local upload & redirect
-
     res.redirect("/shoes/" + newShoe._id);
   }),
 ];
