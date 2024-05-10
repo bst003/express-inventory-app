@@ -4,9 +4,11 @@ block content
 	h1= title
 	if brands.length
 		p Check out our wide array of running shoe brands 
-		ul 
+		ul(class="item-grid")
 			each brand in brands
-				li 
-					a(href=brand.url) #{brand.name}
+				li(class="grid-item") 
+					a(href=brand.url) 
+						img(src="/images/prod-placeholder.jpg" alt=brand.name)
+						p #{brand.name}
 	else 
 		p There are no brands in our inventory

@@ -4,9 +4,11 @@ block content
 	h1= title
 	if styles.length
 		p Check out our wide array of running shoe styles 
-		ul 
+		ul(class="item-grid")
 			each style in styles
-				li 
-					a(href=style.url) #{style.name}
+				li(class="grid-item") 
+					a(href=style.url) 
+						img(src="/images/prod-placeholder.jpg" alt=style.name)
+						p #{style.name}
 	else 
 		p There are no styles in our inventory
