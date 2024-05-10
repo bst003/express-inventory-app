@@ -1,21 +1,9 @@
 const async_handler = require("express-async-handler");
-const { query, validationResult, body } = require("express-validator");
+const { validationResult, body } = require("express-validator");
 
-const multer = require("multer");
+const Multer = require("../core/Multer");
 
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, "uploads/");
-  },
-  filename: function (req, file, cb) {
-    console.log(file);
-
-    const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
-    cb(null, file.fieldname + "-" + uniqueSuffix + ".jpg");
-  },
-});
-
-const upload = multer({ storage: storage });
+const upload = Multer.upload;
 
 const Cloudinary = require("../core/Cloudinary");
 
@@ -146,9 +134,9 @@ shoeController.shoes_create_post = [
       if (uploadedImage) {
         shoeDetails.thumbnail_id = uploadedImage.public_id;
         shoeDetails.thumbnail_url = uploadedImage.secure_url;
-
-        Filesystem.deleteFile(uploadedImagePath);
       }
+
+      Filesystem.deleteFile(uploadedImagePath);
     }
 
     const newShoe = new Shoe(shoeDetails);
