@@ -17,25 +17,15 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage: storage });
 
-const cloudinary = require("cloudinary");
-const cloudinaryConfig = require("../cloudinary.config");
+const Cloudinary = require("../core/Cloudinary");
+
+const Filesystem = require("../core/Filesystem");
 
 const path = require("node:path");
-const fs = require("fs");
 
 const Shoe = require("../models/shoe");
 const Style = require("../models/style");
 const Brand = require("../models/brand");
-
-function deleteFile(filePath) {
-  fs.unlink(filePath, (err) => {
-    if (err) {
-      console.log(err);
-    } else {
-      console.log("File removed: " + filePath);
-    }
-  });
-}
 
 const shoeController = {};
 
@@ -112,7 +102,11 @@ shoeController.shoes_create_post = [
   async_handler(async (req, res, next) => {
     const result = validationResult(req);
 
-    let uploadedImagePath = path.resolve(req.file.path);
+    let uploadedImagePath;
+
+    if (req.file !== undefined) {
+      uploadedImagePath = path.resolve(req.file.path);
+    }
 
     console.log("uploaded image path: " + uploadedImagePath);
 
@@ -136,44 +130,6 @@ shoeController.shoes_create_post = [
       });
     }
 
-    // 1. upload thumbnail to cloudinary
-
-    cloudinary.config({
-      cloud_name: cloudinaryConfig.name,
-      api_key: cloudinaryConfig.key,
-      api_secret: cloudinaryConfig.secret,
-    });
-
-    console.log(cloudinary.config());
-
-    const uploadImage = async (imagePath) => {
-      // Use the uploaded file's name as the asset's public ID and
-      // allow overwriting the asset with new versions
-      const options = {
-        use_filename: true,
-        unique_filename: false,
-        overwrite: true,
-      };
-
-      try {
-        // Upload the image
-        const result = await cloudinary.uploader.upload(imagePath, options);
-        console.log(result);
-        return {
-          public_id: result.public_id,
-          secure_url: result.secure_url,
-        };
-      } catch (error) {
-        console.error(error);
-      }
-    };
-
-    const uploadedImage = await uploadImage(uploadedImagePath);
-
-    console.log(uploadedImage);
-
-    // 2. add image url to shoeDetails if file uploaded, if no upload then add empty property
-
     // If no errors then create shoe and redirect to shoe detail page
     const shoeDetails = {
       name: req.body.name,
@@ -183,18 +139,22 @@ shoeController.shoes_create_post = [
       style: req.body.style,
     };
 
-    if (uploadedImage) {
-      console.log("image uploaded to cloudinary");
-      shoeDetails.thumbnail_id = uploadedImage.public_id;
-      shoeDetails.thumbnail_url = uploadedImage.secure_url;
+    if (uploadedImagePath) {
+      Cloudinary.initConfig();
+      const uploadedImage = await Cloudinary.uploadImage(uploadedImagePath);
+
+      if (uploadedImage) {
+        shoeDetails.thumbnail_id = uploadedImage.public_id;
+        shoeDetails.thumbnail_url = uploadedImage.secure_url;
+
+        Filesystem.deleteFile(uploadedImagePath);
+      }
     }
 
     const newShoe = new Shoe(shoeDetails);
     await newShoe.save();
 
-    // 3. Remove local upload
-
-    deleteFile(uploadedImagePath);
+    // 3. Remove local upload & redirect
 
     res.redirect("/shoes/" + newShoe._id);
   }),
