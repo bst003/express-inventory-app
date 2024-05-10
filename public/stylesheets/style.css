@@ -198,3 +198,15 @@ form input[type="submit"]{
     margin: 0px;
     text-align: center;
   }
+
+@media screen and (max-width: 768px) {
+  .item-grid{
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media screen and (max-width: 478px) {
+  .item-grid{
+    grid-template-columns: 1fr;
+  }
+}
