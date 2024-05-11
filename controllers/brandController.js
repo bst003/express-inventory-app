@@ -1,6 +1,16 @@
 const async_handler = require("express-async-handler");
 const { query, validationResult, body } = require("express-validator");
 
+const Multer = require("../core/Multer");
+
+const upload = Multer.upload;
+
+const Cloudinary = require("../core/Cloudinary");
+
+const Filesystem = require("../core/Filesystem");
+
+const path = require("node:path");
+
 const Brand = require("../models/brand");
 const Shoe = require("../models/shoe");
 
@@ -42,17 +52,24 @@ brandController.brands_create_get = async_handler(async (req, res, next) => {
 });
 
 brandController.brands_create_post = [
+  upload.single("thumbnail"),
+
   body("name")
     .isLength({ min: 3, max: 150 })
     .trim()
     .escape()
     .withMessage("Name must be between 3 and 150 characters"),
+
   async_handler(async (req, res, next) => {
     const result = validationResult(req);
 
-    console.log(req);
+    let uploadedImagePath;
 
-    const submittedBrandDetails = {
+    if (req.file !== undefined) {
+      uploadedImagePath = path.resolve(req.file.path);
+    }
+
+    const brandDetails = {
       name: req.body.name,
     };
 
@@ -65,12 +82,24 @@ brandController.brands_create_post = [
       res.render("brands/brands_form", {
         title: "Create Brand",
         postUrl,
-        brand: submittedBrandDetails,
+        brand: brandDetails,
         errors: result.errors,
       });
     }
 
     // If no errors then create brand and redirect to brand detail page
+
+    if (uploadedImagePath) {
+      Cloudinary.initConfig();
+      const uploadedImage = await Cloudinary.uploadImage(uploadedImagePath);
+
+      if (uploadedImage) {
+        brandDetails.thumbnail_id = uploadedImage.public_id;
+        brandDetails.thumbnail_url = uploadedImage.secure_url;
+      }
+
+      Filesystem.deleteFile(uploadedImagePath);
+    }
 
     const newBrand = new Brand(brandDetails);
     await newBrand.save();

@@ -1,6 +1,8 @@
 extends ../layout
 
 block content
+    if brand.thumbnail_url
+        img(src=brand.thumbnail_url alt=brand.name)
     h1 #{title}
     if shoesInBrand.length
         p check out our selection of shoes for #{brand.name}

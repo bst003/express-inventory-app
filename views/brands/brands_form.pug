@@ -2,11 +2,14 @@ extends ../layout
 
 block content
     h1 #{title} 
-    form(action=postUrl method="post")
+    form(action=postUrl method="post" enctype="multipart/form-data")
         div(class="input-contain")
             label(for="name") Name 
                 span(class="required") *
             input(id="name" name="name" type="text" value=(brand && brand.name ? brand.name : "") minlength="3" maxlength="150" required)
+        div(class="input-contain")
+            label(for="thumbnail") Thumbnail 
+            input(id="thumbnail" name="thumbnail" type="file")
         input(type="Submit" value="Submit")  
     if errors 
         each error in errors 
