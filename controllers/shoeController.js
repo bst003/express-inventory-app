@@ -99,6 +99,14 @@ shoeController.shoes_create_post = [
 
     console.log("uploaded image path: " + uploadedImagePath);
 
+    const shoeDetails = {
+      name: req.body.name,
+      description: req.body.description,
+      price: req.body.price,
+      brand: req.body.brand,
+      style: req.body.style,
+    };
+
     // if errors return shoes_form and list errors
     if (!result.isEmpty()) {
       console.log(result);
@@ -114,19 +122,13 @@ shoeController.shoes_create_post = [
         title: "Create Shoe",
         postUrl,
         styles,
+        shoe: shoeDetails,
         errors: result.errors,
         brands,
       });
     }
 
     // If no errors then create shoe and redirect to shoe detail page
-    const shoeDetails = {
-      name: req.body.name,
-      description: req.body.description,
-      price: req.body.price,
-      brand: req.body.brand,
-      style: req.body.style,
-    };
 
     if (uploadedImagePath) {
       Cloudinary.initConfig();
@@ -231,7 +233,7 @@ shoeController.shoes_update_post = [
 
     const shoeId = parsedUrlPath.split("/")[1];
 
-    const submittedShoeDetails = {
+    const shoeDetails = {
       name: req.body.name,
       description: req.body.description,
       price: req.body.price,
@@ -254,7 +256,7 @@ shoeController.shoes_update_post = [
       res.render("shoes/shoes_form", {
         title: "Update Shoe: " + shoe.name,
         postUrl,
-        shoe: submittedShoeDetails,
+        shoe: shoeDetails,
         styles,
         errors: result.errors,
         brands,
@@ -263,7 +265,7 @@ shoeController.shoes_update_post = [
 
     // If no errors then create shoe and redirect to shoe detail page
 
-    await Shoe.findByIdAndUpdate(shoeId, submittedShoeDetails);
+    await Shoe.findByIdAndUpdate(shoeId, shoeDetails);
 
     res.redirect("/shoes/" + shoeId);
   }),
