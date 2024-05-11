@@ -162,21 +162,28 @@ brandController.brands_update_get = async_handler(async (req, res, next) => {
 });
 
 brandController.brands_update_post = [
+  upload.single("thumbnail"),
+
   body("name")
     .isLength({ min: 3, max: 150 })
     .trim()
     .escape()
     .withMessage("Name must be between 3 and 150 characters"),
+
   async_handler(async (req, res, next) => {
     const result = validationResult(req);
 
-    console.log(req);
+    let uploadedImagePath;
+
+    if (req.file !== undefined) {
+      uploadedImagePath = path.resolve(req.file.path);
+    }
 
     const parsedUrlPath = req._parsedUrl.path;
 
     const brandId = parsedUrlPath.split("/")[1];
 
-    const submittedBrandDetails = {
+    const brandDetails = {
       name: req.body.name,
     };
 
@@ -191,14 +198,26 @@ brandController.brands_update_post = [
       res.render("brands/brands_form", {
         title: "Update Brand: " + brand.name,
         postUrl,
-        brand: submittedBrandDetails,
+        brand: brandDetails,
         errors: result.errors,
       });
     }
 
     // If no errors then create brand and redirect to brand detail page
 
-    await Brand.findByIdAndUpdate(brandId, submittedBrandDetails);
+    if (uploadedImagePath) {
+      Cloudinary.initConfig();
+      const uploadedImage = await Cloudinary.uploadImage(uploadedImagePath);
+
+      if (uploadedImage) {
+        brandDetails.thumbnail_id = uploadedImage.public_id;
+        brandDetails.thumbnail_url = uploadedImage.secure_url;
+      }
+
+      Filesystem.deleteFile(uploadedImagePath);
+    }
+
+    await Brand.findByIdAndUpdate(brandId, brandDetails);
 
     res.redirect("/brands/" + brandId);
   }),
