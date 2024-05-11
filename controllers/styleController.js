@@ -1,6 +1,16 @@
 const async_handler = require("express-async-handler");
 const { query, validationResult, body } = require("express-validator");
 
+const Multer = require("../core/Multer");
+
+const upload = Multer.upload;
+
+const Cloudinary = require("../core/Cloudinary");
+
+const Filesystem = require("../core/Filesystem");
+
+const path = require("node:path");
+
 const Style = require("../models/style");
 const Shoe = require("../models/shoe");
 
@@ -42,21 +52,29 @@ styleController.styles_create_get = async_handler(async (req, res, next) => {
 });
 
 styleController.styles_create_post = [
+  upload.single("thumbnail"),
+
   body("name")
     .isLength({ min: 3, max: 150 })
     .trim()
     .escape()
     .withMessage("Name must be between 3 and 150 characters"),
+
   async_handler(async (req, res, next) => {
     const result = validationResult(req);
 
-    console.log(req);
+    let uploadedImagePath;
 
-    const submittedStyleDetails = {
+    if (req.file !== undefined) {
+      uploadedImagePath = path.resolve(req.file.path);
+    }
+
+    const styleDetails = {
       name: req.body.name,
     };
 
     // if errors return styles_form and list errors
+
     if (!result.isEmpty()) {
       console.log(result);
 
@@ -65,13 +83,26 @@ styleController.styles_create_post = [
       res.render("styles/styles_form", {
         title: "Create Style",
         postUrl,
-        style: submittedStyleDetails,
+        style: styleDetails,
         errors: result.errors,
       });
     }
 
     // If no errors then create style and redirect to style detail page
-    const newStyle = new Style(submittedStyleDetails);
+
+    if (uploadedImagePath) {
+      Cloudinary.initConfig();
+      const uploadedImage = await Cloudinary.uploadImage(uploadedImagePath);
+
+      if (uploadedImage) {
+        styleDetails.thumbnail_id = uploadedImage.public_id;
+        styleDetails.thumbnail_url = uploadedImage.secure_url;
+      }
+
+      Filesystem.deleteFile(uploadedImagePath);
+    }
+
+    const newStyle = new Style(styleDetails);
     await newStyle.save();
 
     res.redirect("/styles/" + newStyle._id);
@@ -132,21 +163,28 @@ styleController.styles_update_get = async_handler(async (req, res, next) => {
 });
 
 styleController.styles_update_post = [
+  upload.single("thumbnail"),
+
   body("name")
     .isLength({ min: 3, max: 150 })
     .trim()
     .escape()
     .withMessage("Name must be between 3 and 150 characters"),
+
   async_handler(async (req, res, next) => {
     const result = validationResult(req);
 
-    console.log(req);
+    let uploadedImagePath;
+
+    if (req.file !== undefined) {
+      uploadedImagePath = path.resolve(req.file.path);
+    }
 
     const parsedUrlPath = req._parsedUrl.path;
 
     const styleId = parsedUrlPath.split("/")[1];
 
-    const submittedStyleDetails = {
+    const styleDetails = {
       name: req.body.name,
     };
 
@@ -161,14 +199,26 @@ styleController.styles_update_post = [
       res.render("styles/styles_form", {
         title: "Update Style: " + style.name,
         postUrl,
-        style: submittedStyleDetails,
+        style: styleDetails,
         errors: result.errors,
       });
     }
 
     // If no errors then create style and redirect to style detail page
 
-    await Style.findByIdAndUpdate(styleId, submittedStyleDetails);
+    if (uploadedImagePath) {
+      Cloudinary.initConfig();
+      const uploadedImage = await Cloudinary.uploadImage(uploadedImagePath);
+
+      if (uploadedImage) {
+        styleDetails.thumbnail_id = uploadedImage.public_id;
+        styleDetails.thumbnail_url = uploadedImage.secure_url;
+      }
+
+      Filesystem.deleteFile(uploadedImagePath);
+    }
+
+    await Style.findByIdAndUpdate(styleId, styleDetails);
 
     res.redirect("/styles/" + styleId);
   }),
