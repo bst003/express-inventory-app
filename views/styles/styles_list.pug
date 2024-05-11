@@ -8,7 +8,7 @@ block content
 			each style in styles
 				li(class="grid-item") 
 					a(href=style.url) 
-						img(src="/images/prod-placeholder.jpg" alt=style.name)
+						img(src=style.thumbnail_url ? `https://res.cloudinary.com/${cloudinaryName}/image/fetch/c_fill,h_600,w_600/${style.thumbnail_url}` : "/images/prod-placeholder.jpg" alt=style.name)
 						p #{style.name}
 	else 
 		p There are no styles in our inventory

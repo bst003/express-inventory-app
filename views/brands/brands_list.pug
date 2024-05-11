@@ -8,7 +8,7 @@ block content
 			each brand in brands
 				li(class="grid-item") 
 					a(href=brand.url) 
-						img(src="/images/prod-placeholder.jpg" alt=brand.name)
+						img(src=brand.thumbnail_url ? `https://res.cloudinary.com/${cloudinaryName}/image/fetch/c_fill,h_600,w_600/${brand.thumbnail_url}` : "/images/prod-placeholder.jpg" alt=brand.name)
 						p #{brand.name}
 	else 
 		p There are no brands in our inventory

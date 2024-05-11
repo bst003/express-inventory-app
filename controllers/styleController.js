@@ -24,6 +24,7 @@ styleController.styles_list = async_handler(async (req, res, next) => {
   res.render("styles/styles_list", {
     title: "All Styles",
     styles: styles,
+    cloudinaryName: Cloudinary.configName(),
   });
 });
 

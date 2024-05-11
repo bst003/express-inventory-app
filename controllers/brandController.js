@@ -24,6 +24,7 @@ brandController.brands_list = async_handler(async (req, res, next) => {
   res.render("brands/brands_list", {
     title: "All Brands",
     brands: brands,
+    cloudinaryName: Cloudinary.configName(),
   });
 });
 
