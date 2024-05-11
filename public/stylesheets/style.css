@@ -120,7 +120,7 @@ a {
 /* Main */ 
 
 .site-content{
-  padding: 0px var(--siteContentPaddingX);
+  padding: 60px var(--siteContentPaddingX);
 }
 
 .site-content__inner{
