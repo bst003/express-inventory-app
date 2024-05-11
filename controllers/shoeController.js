@@ -25,6 +25,7 @@ shoeController.shoes_list = async_handler(async (req, res, next) => {
   res.render("shoes/shoes_list", {
     title: "All Shoes",
     shoes: shoes,
+    cloudinaryName: Cloudinary.configName(),
   });
 });
 

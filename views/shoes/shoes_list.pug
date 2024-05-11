@@ -8,7 +8,7 @@ block content
 			each shoe in shoes
 				li(class="grid-item") 
 					a(href=shoe.url) 
-						img(src=shoe.thumbnail_url ? shoe.thumbnail_url : "/images/prod-placeholder.jpg" alt=shoe.name)
+						img(src=shoe.thumbnail_url ? `https://res.cloudinary.com/${cloudinaryName}/image/fetch/c_fill,h_600,w_600/${shoe.thumbnail_url}` : "/images/prod-placeholder.jpg" alt=shoe.name)
 						p #{shoe.name} - $#{shoe.price}
 	else 
 		p There are no shoes in our inventory

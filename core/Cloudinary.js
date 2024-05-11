@@ -32,9 +32,14 @@ const Cloudinary = (() => {
     }
   };
 
+  const configName = () => {
+    return cloudinaryConfig.name;
+  };
+
   return {
     initConfig,
     uploadImage,
+    configName,
   };
 })();
 
