@@ -40,6 +40,7 @@ styleController.styles_detail = async_handler(async (req, res, next) => {
     title: "Style: " + style.name,
     style,
     shoesInStyle,
+    cloudinaryName: Cloudinary.configName(),
   });
 });
 

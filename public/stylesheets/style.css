@@ -128,6 +128,21 @@ a {
   max-width: var(--siteContentWidth);
 }
 
+/* Shoe Detail Page */ 
+
+.shoe-details{
+  display: flex;
+  gap: 40px;
+}
+
+.shoe-image {
+  flex: 1;
+}
+
+.shoe-content {
+  flex: 2;
+}
+
 /* Forms */ 
 
 form label{

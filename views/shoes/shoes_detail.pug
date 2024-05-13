@@ -1,16 +1,17 @@
 extends ../layout
 
 block content
-    if shoe.thumbnail_url
-        img(src=shoe.thumbnail_url alt=shoe.name)
-    h1 #{title}
-    p $#{shoe.price}
-    p #{shoe.description}
-    hr
-    p Brand:
-        a(href=shoe.brand.url)  #{shoe.brand.name}
-    p Style: 
-        a(href=shoe.style.url)  #{shoe.style.name}
+    section(class="shoe-details")
+        div(class="shoe-image")
+            img(src=shoe.thumbnail_url ? shoe.thumbnail_url : "/images/prod-placeholder.jpg" alt=shoe.name)
+        div(class="shoe-content")
+            h1 #{title}
+            p $#{shoe.price}
+            p #{shoe.description}
+            p Brand:
+                a(href=shoe.brand.url)  #{shoe.brand.name}
+            p Style: 
+                a(href=shoe.style.url)  #{shoe.style.name}
     hr 
     a(href=shoe.url + "/update") Update
     br

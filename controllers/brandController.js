@@ -40,6 +40,7 @@ brandController.brands_detail = async_handler(async (req, res, next) => {
     title: "Brand: " + brand.name,
     brand,
     shoesInBrand,
+    cloudinaryName: Cloudinary.configName(),
   });
 });
 
