@@ -20,8 +20,6 @@ const shoeController = {};
 shoeController.shoes_list = async_handler(async (req, res, next) => {
   const shoes = await Shoe.find().sort({ name: "asc" }).exec();
 
-  console.log(shoes);
-
   res.render("shoes/shoes_list", {
     title: "All Shoes",
     shoes: shoes,
@@ -33,8 +31,6 @@ shoeController.shoes_detail = async_handler(async (req, res, next) => {
   const shoe = await Shoe.findById(req.params.id)
     .populate("brand style")
     .exec();
-
-  console.log(shoe);
 
   res.render("shoes/shoes_detail", {
     title: "Shoe: " + shoe.name,
@@ -97,8 +93,6 @@ shoeController.shoes_create_post = [
       uploadedImagePath = path.resolve(req.file.path);
     }
 
-    console.log("uploaded image path: " + uploadedImagePath);
-
     const shoeDetails = {
       name: req.body.name,
       description: req.body.description,
@@ -109,8 +103,6 @@ shoeController.shoes_create_post = [
 
     // if errors return shoes_form and list errors
     if (!result.isEmpty()) {
-      console.log(result);
-
       const [styles, brands] = await Promise.all([
         Style.find().sort({ name: "asc" }).exec(),
         Brand.find().sort({ name: "asc" }).exec(),
@@ -226,8 +218,6 @@ shoeController.shoes_update_post = [
     .withMessage("Style must not be empty"),
   async_handler(async (req, res, next) => {
     const result = validationResult(req);
-
-    console.log(req);
 
     const parsedUrlPath = req._parsedUrl.path;
 

@@ -3,8 +3,6 @@ const router = express.Router();
 
 const styleController = require("../controllers/styleController");
 
-// Express validator?
-
 /* GET styles index page. */
 router.get("/", styleController.styles_list);
 

@@ -3,8 +3,6 @@ const router = express.Router();
 
 const shoeController = require("../controllers/shoeController");
 
-// Express validator?
-
 /* GET Shoes index page. */
 router.get("/", shoeController.shoes_list);
 

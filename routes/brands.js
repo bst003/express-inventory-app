@@ -3,8 +3,6 @@ const router = express.Router();
 
 const brandController = require("../controllers/brandController");
 
-// Express validator?
-
 /* GET brands index page. */
 router.get("/", brandController.brands_list);
 

@@ -8,7 +8,6 @@ const brandSchema = new Schema({
   thumbnail_url: { type: String, minlength: 5 },
 });
 
-// Create a virtual property `domain` that's computed from `email`.
 brandSchema.virtual("url").get(function () {
   return `/brands/${this._id}`;
 });

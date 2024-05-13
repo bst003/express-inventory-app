@@ -19,8 +19,6 @@ const styleController = {};
 styleController.styles_list = async_handler(async (req, res, next) => {
   const styles = await Style.find().sort({ name: "asc" }).exec();
 
-  console.log(styles);
-
   res.render("styles/styles_list", {
     title: "All Styles",
     styles: styles,
@@ -33,8 +31,6 @@ styleController.styles_detail = async_handler(async (req, res, next) => {
     Style.findById(req.params.id).exec(),
     Shoe.find({ style: req.params.id }).exec(),
   ]);
-
-  console.log(style);
 
   res.render("styles/styles_detail", {
     title: "Style: " + style.name,
@@ -78,8 +74,6 @@ styleController.styles_create_post = [
     // if errors return styles_form and list errors
 
     if (!result.isEmpty()) {
-      console.log(result);
-
       const postUrl = req.originalUrl;
 
       res.render("styles/styles_form", {
@@ -192,8 +186,6 @@ styleController.styles_update_post = [
 
     // if errors return styles_form and list errors
     if (!result.isEmpty()) {
-      console.log(result);
-
       const postUrl = req.originalUrl;
 
       const style = await Style.findById(styleId).exec();

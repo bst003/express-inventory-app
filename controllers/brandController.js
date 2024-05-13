@@ -1,5 +1,5 @@
 const async_handler = require("express-async-handler");
-const { query, validationResult, body } = require("express-validator");
+const { validationResult, body } = require("express-validator");
 
 const Multer = require("../core/Multer");
 
@@ -19,8 +19,6 @@ const brandController = {};
 brandController.brands_list = async_handler(async (req, res, next) => {
   const brands = await Brand.find().sort({ name: "asc" }).exec();
 
-  console.log(brands);
-
   res.render("brands/brands_list", {
     title: "All Brands",
     brands: brands,
@@ -33,8 +31,6 @@ brandController.brands_detail = async_handler(async (req, res, next) => {
     Brand.findById(req.params.id).exec(),
     Shoe.find({ brand: req.params.id }).exec(),
   ]);
-
-  console.log(brand);
 
   res.render("brands/brands_detail", {
     title: "Brand: " + brand.name,
@@ -77,8 +73,6 @@ brandController.brands_create_post = [
 
     // if errors return brands_form and list errors
     if (!result.isEmpty()) {
-      console.log(result);
-
       const postUrl = req.originalUrl;
 
       res.render("brands/brands_form", {
@@ -191,8 +185,6 @@ brandController.brands_update_post = [
 
     // if errors return brands_form and list errors
     if (!result.isEmpty()) {
-      console.log(result);
-
       const postUrl = req.originalUrl;
 
       const brand = await Brand.findById(brandId).exec();
