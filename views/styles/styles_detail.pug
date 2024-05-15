@@ -2,7 +2,7 @@ extends ../layout
 
 block content
     if style.thumbnail_url
-        img(src=style.thumbnail_url alt=style.name)
+        img(class="style-thumb" src=style.thumbnail_url alt=style.name)
     h1 #{title}
     if shoesInStyle.length
         p check out our selection of #{style.name} shoes

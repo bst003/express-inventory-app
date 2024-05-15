@@ -143,6 +143,14 @@ a {
   flex: 2;
 }
 
+/* Brand/Styles Detail Page */ 
+
+.brand-thumb,
+.style-thumb{
+  max-width: 400px;
+  width: 100%;
+}
+
 /* Forms */ 
 
 form label{
