@@ -123,7 +123,8 @@ shoeController.shoes_create_post = [
     // If no errors then create shoe and redirect to shoe detail page
 
     if (uploadedImagePath) {
-      Cloudinary.initConfig();
+      console.log(Cloudinary.initConfig());
+
       const uploadedImage = await Cloudinary.uploadImage(uploadedImagePath);
 
       if (uploadedImage) {

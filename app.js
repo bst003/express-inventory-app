@@ -3,6 +3,9 @@ const mongoDBConfig = require("./mongodb.config");
 
 mongoose.set("strictQuery", false);
 
+console.log("mongo user " + mongoDBConfig.username);
+console.log("mongo pass " + mongoDBConfig.password);
+
 const uri = `mongodb+srv://${mongoDBConfig.username}:${mongoDBConfig.password}@cluster0.xpetqvd.mongodb.net/inventory_app?retryWrites=true&w=majority&appName=Cluster0`;
 
 mongoConnect().catch(console.dir);
